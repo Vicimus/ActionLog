@@ -3,7 +3,13 @@
 class ReportController extends \BaseController {
 
 	public function index(){
-		return "test";
+		
+		//get a list of unique applications
+
+		//get a list of unique session_ids based on application
+
+		$test = Application::Distinct();
+
 	}
 
 }

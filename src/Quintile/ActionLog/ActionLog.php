@@ -78,7 +78,7 @@
 			//This stops it from recording into the database on uses of ARTISAN
 			if(!array_key_exists('HTTP_HOST', $_SERVER)) return false;
 
-			$action = self::get();
+			$action = self::getAction();
 
 			if($action->match || self::$force)
 			{	
@@ -98,6 +98,11 @@
 
 		}
 
+		public static function setRoute($route){
+			self::$route = $route;
+			dd("setRoute");
+		}
+
 		public static function isIgnoringPostData(){
 			return !self::$track_post;
 		}
@@ -109,12 +114,12 @@
 			return self::$names[$path][$method];
 		}
 
-		public static function get($path = NULL, $method = NULL)
+		public static function getAction($path = NULL, $method = NULL)
 		{
 
 			//If path or method are not passed in
 			//assign the request path and method
-			//This means that an empty get() request
+			//This means that an empty getAction() request
 			//attempts to get the current path and current method
 			if(!$path) $path = \Request::path();
 			if(!$method) $method = \Request::method();

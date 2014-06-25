@@ -87,3 +87,15 @@ ACTION LOG REGISTRATION
 			If this was for a login form submission, it would no longer record
 			logs for failed submission attempts, and when an attempt succeeded, the
 			log would record without recording post data.
+
+	REPORTS
+
+		The default route to view ActionLog reports is:
+
+			'actionlog/report'
+
+		You can hijack the default route for viewing the reports:
+
+		Add to your apps route folder:
+
+		Route::get('WHATEVER', 'Quintile\ActionLog\ReportController@index');
