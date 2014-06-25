@@ -10,8 +10,9 @@
 		static public $names = array();
 
 		static private $force = false;
+		static private $track_post = true;
 
-		public function __construct($package, $action_name, $wildcard = null){
+		public function __construct(Action $action){
 
 			//Set the name of the application
 			if(defined('APP_NAME'))
@@ -20,7 +21,7 @@
 				$this->application = "Unspecified";
 
 			//Set the name of the package
-			$this->package = $package;
+			$this->package = $action->package;
 
 			//Record the Session ID
 			$this->session_id = \Session::getId();
@@ -30,16 +31,17 @@
 				$this->user_id = \Auth::user()->id;
 
 			//Set the name of the action
-			$this->action_name = $action_name;
+			$this->action_name = $action->name;
 
 			//Set the route (the URL)
 			$this->route = \Request::path();
 
-			if($wildcard)
-				$this->post_data = json_encode($wildcard);
+			if($action->wildcard)
+				$this->post_data = json_encode($action->wildcard);
 
-			//Set the POST data
-			if(count($_POST))
+			//Set the POST data if not ignoring
+			dd($action);
+			if(count($_POST) && (self::$track_post && $action->track_post ))
 			{	
 				$post_data = $_POST;
 				foreach($post_data as $key => &$value)
@@ -65,23 +67,27 @@
 			//This stops it from recording into the database on uses of ARTISAN
 			if(!array_key_exists('HTTP_HOST', $_SERVER)) return false;
 
-			$logDetails = self::get();
+			$action = self::get();
 
-			$log = new self($logDetails->package, $logDetails->name, $logDetails->extracted);
-			
-		
-			if(!$log->hasMatch() || self::$force)
+			if($action->match || self::$force)
+			{
+				dd($action);
+				$log = new self($action);
 				$log->save();
+			}
 
 			return true;
 
 		}
 
-		public static function register($package, $path, $method, $name)
+		public static function &register($package, $path, $method, $name)
 		{
 		
-			self::$names[$path][$method]['name'] = $name;
-			self::$names[$path][$method]['package'] = $package;
+			self::$names[$path][$method] = new Action($name, $package);
+			return self::$names[$path][$method];
+
+			//self::$names[$path][$method]['name'] = $name;
+			//self::$names[$path][$method]['package'] = $package;
 		}
 
 		public static function get($path = NULL, $method = NULL)
@@ -124,7 +130,7 @@
 			//as a match, so it needs to search for the unmodified name first.
 			//This also means you could register " home/noun/specific " AND " home/noun/* "
 			//and it would try to match the first, and fallback to the second if nothing was found.
-			$alt_results = new \stdClass();
+			$alt_results = new Action();
 			if(!$results->match)
 			{
 				$alt_results = self::findMatch($alternative, $method);
@@ -137,22 +143,21 @@
 			return (isset($alt_results->match) && $alt_results->match) ? $alt_results : $results;
 		}
 
-		private static function findMatch($path, $method){
+		private static function &findMatch($path, $method){
 
-			//Default action name
-			$results = new \stdClass();
-			$results->name = $path . "_" . $method;
-			$results->package = 'NULL';
-			$results->match = false;
+			//Default action
+			$results = new Action($path."_".$method, 'NULL');
 
-			//Find the correct action name
+			//Find the correct action
 			if(array_key_exists($path, self::$names))
 			{
 				if(array_key_exists($method, self::$names[$path]))
 				{
-					$results->name = self::$names[$path][$method]['name'];
-					$results->package = self::$names[$path][$method]['package'];
+					$results = self::$names[$path][$method];
 					$results->match = true;
+					//$results->name = self::$names[$path][$method]->name;
+					//$results->package = self::$names[$path][$method]->package;
+					//$results->match = true;
 				}
 			}
 
@@ -161,6 +166,10 @@
 
 		public static function LogEverything(){
 			self::$force = true;
+		}
+
+		public static function IgnorePostData(){
+			self::$track_post = false;
 		}
 	}
 

@@ -32,7 +32,10 @@ class ActionLogServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		$this->app['actionlog'] = $this->app->share(function($app)
+		{
+			return new ActionLog;
+		});
 	}
 
 	/**
@@ -42,7 +45,7 @@ class ActionLogServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array();
+		return array('actionlog');
 	}
 
 }

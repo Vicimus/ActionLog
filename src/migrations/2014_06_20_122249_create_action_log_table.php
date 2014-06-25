@@ -19,7 +19,7 @@ class CreateActionLogTable extends Migration {
 			$table->increments('id');
 			$table->string('application', 40)->nullable();
 			$table->string('session_id');
-			$table->integer('user_id')->nullable();
+			$table->integer('user_id')->nullable()->unsigned();
 			$table->string('action_name');
 			$table->string('route');
 			$table->timestamps();
