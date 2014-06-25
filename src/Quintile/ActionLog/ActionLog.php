@@ -11,6 +11,7 @@
 
 		static private $force = false;
 		static private $track_post = true;
+		static private $require_auth = false;
 
 		public function __construct(Action $action){
 
@@ -28,7 +29,7 @@
 
 			//Record the method (GET or POST)
 			$this->method = $action->method;
-			
+
 			//Track the user if there is one logged in
 			if(isset(\Auth::user()->id))
 				$this->user_id = \Auth::user()->id;
@@ -74,7 +75,15 @@
 			$action = self::get();
 
 			if($action->match || self::$force)
-			{
+			{	
+				if(
+					(ActionLog::$require_auth && !\Auth::check() && $action->require_auth) || 
+					
+					($action->require_auth && !\Auth::check())
+					
+				)
+				return false;
+
 				$log = new self($action);
 				$log->save();
 			}
@@ -170,10 +179,17 @@
 
 		public static function LogEverything(){
 			self::$force = true;
+			//return new ActionLog();
 		}
 
 		public static function IgnorePostData(){
 			self::$track_post = false;
+			//return new ActionLog();
+		}
+
+		public static function RequireAuth(){
+			self::$require_auth = true;
+			//return new ActionLog();
 		}
 	}
 
