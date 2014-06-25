@@ -8,11 +8,13 @@ class Action {
 	public $match;
 	public $extracted;
 	public $wildcard;
+	public $method;
 
-	public function __construct($name = NULL, $package = NULL)
+	public function __construct($name = NULL, $package = NULL, $method = NULL)
 	{
 		$this->name = $name;
 		$this->package = $package;
+		$this->method = $method;
 		$this->match = false;
 		$this->extracted = NULL;
 		$this->wildcard = NULL;

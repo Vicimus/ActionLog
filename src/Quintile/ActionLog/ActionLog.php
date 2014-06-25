@@ -26,6 +26,9 @@
 			//Record the Session ID
 			$this->session_id = \Session::getId();
 
+			//Record the method (GET or POST)
+			$this->method = $action->method;
+			
 			//Track the user if there is one logged in
 			if(isset(\Auth::user()->id))
 				$this->user_id = \Auth::user()->id;
@@ -87,7 +90,7 @@
 		public static function &register($package, $path, $method, $name)
 		{
 		
-			self::$names[$path][$method] = new Action($name, $package);
+			self::$names[$path][$method] = new Action($name, $package, $method);
 			return self::$names[$path][$method];
 
 			//self::$names[$path][$method]['name'] = $name;
