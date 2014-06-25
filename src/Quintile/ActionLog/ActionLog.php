@@ -40,7 +40,6 @@
 				$this->post_data = json_encode($action->wildcard);
 
 			//Set the POST data if not ignoring
-			dd($action);
 			if(count($_POST) && (self::$track_post && $action->track_post ))
 			{	
 				$post_data = $_POST;
@@ -50,6 +49,11 @@
 
 				$this->post_data .= json_encode($post_data);
 			}
+
+			//Set the GET data if wildcard was present
+			if(count($action->extracted) && (self::$track_post && $action->track_post))
+				$this->post_data .= json_encode($action->extracted);
+			
 		}
 
 		public function hasNoMatch(){
@@ -71,7 +75,6 @@
 
 			if($action->match || self::$force)
 			{
-				dd($action);
 				$log = new self($action);
 				$log->save();
 			}

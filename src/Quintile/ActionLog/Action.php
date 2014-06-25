@@ -16,6 +16,7 @@ class Action {
 		$this->match = false;
 		$this->extracted = NULL;
 		$this->wildcard = NULL;
+		$this->track_post = true;
 
 	}
 
