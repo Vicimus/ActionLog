@@ -36,11 +36,8 @@
 			//Set the route (the URL)
 			$this->route = \Request::path();
 
-			if($action->wildcard)
-				$this->post_data = json_encode($action->wildcard);
-
 			//Set the POST data if not ignoring
-			if(count($_POST) && (self::$track_post && $action->track_post ))
+			if(count($_POST) && ((self::$track_post && !isset($action->track_post) || (!self::$track_post && $action->track_post))))
 			{	
 				$post_data = $_POST;
 				foreach($post_data as $key => &$value)
@@ -81,6 +78,10 @@
 
 			return true;
 
+		}
+
+		public static function isIgnoringPostData(){
+			return !self::$track_post;
 		}
 
 		public static function &register($package, $path, $method, $name)
@@ -158,9 +159,6 @@
 				{
 					$results = self::$names[$path][$method];
 					$results->match = true;
-					//$results->name = self::$names[$path][$method]->name;
-					//$results->package = self::$names[$path][$method]->package;
-					//$results->match = true;
 				}
 			}
 

@@ -16,13 +16,19 @@ class Action {
 		$this->match = false;
 		$this->extracted = NULL;
 		$this->wildcard = NULL;
-		$this->track_post = true;
+		$this->track_post = NULL;
 
 	}
 
-
 	public function IgnorePostData(){
 		$this->track_post = false;
+	}
+
+	public function TrackPostData(){
+		if(ActionLog::isIgnoringPostData())
+			$this->track_post = true;
+		else
+			$this->track_post = NULL;
 	}
 	
 
