@@ -9,36 +9,41 @@
 		//For storing Action Names
 		static public $names = array();
 
+		//Routing
+		static public $route = "actionlog/report";
+
 		static private $force = false;
 		static private $track_post = true;
 		static private $require_auth = false;
 
-		public function __construct(Action $action){
+		public static function makeFromAction(Action $action){
+
+			$al = new ActionLog();
 
 			//Set the name of the application
 			if(defined('APP_NAME'))
-				$this->application = APP_NAME;
+				$al->application = APP_NAME;
 			else
-				$this->application = "Unspecified";
+				$al->application = "Unspecified";
 
 			//Set the name of the package
-			$this->package = $action->package;
+			$al->package = $action->package;
 
 			//Record the Session ID
-			$this->session_id = \Session::getId();
+			$al->session_id = \Session::getId();
 
 			//Record the method (GET or POST)
-			$this->method = $action->method;
+			$al->method = $action->method;
 
 			//Track the user if there is one logged in
 			if(isset(\Auth::user()->id))
-				$this->user_id = \Auth::user()->id;
+				$al->user_id = \Auth::user()->id;
 
 			//Set the name of the action
-			$this->action_name = $action->name;
+			$al->action_name = $action->name;
 
 			//Set the route (the URL)
-			$this->route = \Request::path();
+			$al->route = \Request::path();
 
 			//Set the POST data if not ignoring
 			if(count($_POST) && ((self::$track_post && !isset($action->track_post) || (!self::$track_post && $action->track_post))))
@@ -48,13 +53,14 @@
 					if(stripos($key, 'password') !== false)
 						$value = \Hash::make($value);
 
-				$this->post_data .= json_encode($post_data);
+				$al->post_data .= json_encode($post_data);
 			}
 
 			//Set the GET data if wildcard was present
 			if(count($action->extracted) && (self::$track_post && $action->track_post))
-				$this->post_data .= json_encode($action->extracted);
-			
+				$al->post_data .= json_encode($action->extracted);
+
+			return $al;
 		}
 
 		public function hasNoMatch(){
@@ -84,7 +90,7 @@
 				)
 				return false;
 
-				$log = new self($action);
+				$log = self::makeFromAction($action);
 				$log->save();
 			}
 
@@ -101,9 +107,6 @@
 		
 			self::$names[$path][$method] = new Action($name, $package, $method);
 			return self::$names[$path][$method];
-
-			//self::$names[$path][$method]['name'] = $name;
-			//self::$names[$path][$method]['package'] = $package;
 		}
 
 		public static function get($path = NULL, $method = NULL)

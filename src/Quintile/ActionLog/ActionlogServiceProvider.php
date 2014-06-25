@@ -19,6 +19,8 @@ class ActionLogServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('quintile/actionlog');
+		
+		include __DIR__.'/../../routes.php';
 
 		\Event::listen('ActionLog.Log', function(){
 			ActionLog::Log();
