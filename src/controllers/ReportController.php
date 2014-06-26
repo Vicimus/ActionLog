@@ -4,12 +4,12 @@ class ReportController extends \BaseController {
 
 	public function index(){
 		
-		//get a list of unique applications
+		//get lists of actionslogs based on application name
+		
 
-		//get a list of unique session_ids based on application
-
-		$test = Application::Distinct();
-
+		$data = ActionLog::with('user')->orderBy('application')->get();
+		return \View::make('actionlog::report.index', array('data' => $data));
+	
 	}
 
 }

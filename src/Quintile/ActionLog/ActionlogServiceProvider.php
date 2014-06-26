@@ -20,11 +20,15 @@ class ActionLogServiceProvider extends ServiceProvider {
 	{
 		$this->package('quintile/actionlog');
 
+		if(defined('\ACTIONLOG_ROUTE_PREFIX'))
+			ActionLog::$route = \ACTIONLOG_ROUTE_PREFIX.ActionLog::$route;
+
 		include __DIR__.'/../../routes.php';
 
 		\Event::listen('ActionLog.Log', function(){
 			ActionLog::Log();
 		});
+
 
 		
 	}
