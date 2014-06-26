@@ -1,7 +1,7 @@
 @section('content')
 
 		<table>
-
+ 
 			<thead>
 				<th>Application</th>
 				<th>Package</th>

@@ -5,7 +5,7 @@
 		public function user(){
 			return $this->belongsTo('User', 'user_id');
 		}
-
+ 
 		//For Eloquent
 		protected $guarded = [ 'session_id', 'user_id' ];
 		protected $table = 'action_log';

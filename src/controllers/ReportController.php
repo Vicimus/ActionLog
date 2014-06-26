@@ -6,7 +6,7 @@ class ReportController extends \BaseController {
 		
 		//get lists of actionslogs based on application name
 		
-
+ 
 		$data = ActionLog::with('user')->orderBy('application')->get();
 		return \View::make('actionlog::report.index', array('data' => $data));
 	
