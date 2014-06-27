@@ -1,0 +1,196 @@
+
+#report {
+
+	font-size: 9pt;
+}
+
+table.report {
+	border: 1px solid #000;
+	box-shadow: 4px 5px 20px 5px #999;
+	width: 90%;
+	border-spacing: 0;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 10pt;
+	margin: 0 auto;
+}
+
+th {
+	background-color: #646669;
+	color: #FFF;
+	font-weight: 600;
+	padding: 1px 5px;
+	text-align: left;
+	
+}
+
+td {
+	
+	border-bottom: 1px solid #DDD;
+	padding: 2px 5px;
+}
+
+td.session_enter {
+	position: absolute;
+	z-index: 9999;
+	background-color: #FFF;
+	border: 1px solid #000;
+	box-shadow: 1px 1px 5px #000;
+}
+
+th.app {
+	width: 10%;
+}
+
+td.app {
+	width: 10%;
+}
+
+th.pkg {
+	width: 10%;
+}
+
+td.pkg {
+	width: 10%;
+}
+
+th.actn {
+	width: 14%;
+}
+
+td.actn {
+	width: 14%;
+}
+
+th.session {
+	text-align: center;
+}
+
+td.session {
+	width: 8%;
+	text-align: center;
+	position: relative;
+	z-index: 0;
+	background-color: inherit;
+	box-shadow: none;
+}
+
+th.user {
+	width: 11%;
+}
+
+td.user {
+	width: 11%;
+}
+
+th.route {
+	width: 24%;
+}
+
+td.route {
+	width: 24%;
+}
+
+th.method {
+	width: 8%;
+}
+
+td.method {
+	width: 8%;
+}
+
+
+td.data {
+	width: 5%;
+	text-align: center;
+}
+
+th.data {
+	text-align: center;
+}
+
+th.date {
+	width: 10%;
+}
+
+td.date {
+	width: 10%;
+}
+
+a.post_data {
+	width: 100%;
+	display: block;
+	cursor: pointer;
+}
+
+table.sub_post_data {
+	width: 90%;
+	border: 1px solid #999;
+	box-shadow: 1px 1px 5px #666;
+	margin: 12px auto;
+	font-size: 0.8em;
+	background-color: #FFF;
+	border-spacing: none;
+}
+
+tr.post_data {
+	 background-color: #EEE;
+
+}
+
+td.post_data {
+	background-color: #EEE;
+	box-shadow: inset  0  4px 10px -2px #666;
+}
+
+td.sub_post_data {
+	border-bottom: 1px dashed #CCC;
+	padding: 5px;
+	box-shadow: none;
+}
+
+table.sub_post_data tr:last-child td {
+	border-bottom: none;
+}
+
+.post_data td.property {
+	font-weight: bold;
+	border-right: 1px dotted #CCC;
+	text-align: right;
+}
+
+.post_data td.value {
+	text-align: left;
+}
+
+#topbar {
+	width: 90%;
+	margin: 10px auto;
+
+}
+
+#search {
+	width: 400px;
+	float: right;
+	font-size: 0.8em;
+	font-weight: 400;
+	font-family: "Open Sans", sans-serif;
+}
+
+#search input {
+	display: inline;
+	border: 1px solid #999;
+	font-family: "Open Sans", sans-serif;
+}
+
+#search select {
+	display: inline;
+	font-family: "Open Sans", sans-serif;
+	border: 1px solid #999;
+}
+
+td.notification {
+	font-size: 1.5em;
+	padding: 10px 20px;
+	text-align: center;
+}
