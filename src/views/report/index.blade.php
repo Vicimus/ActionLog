@@ -55,7 +55,8 @@
 				@if($log->user_id == NULL)
 					{{ "<td class='user'></td>" }}
 				@else
-					{{ "<td class='user'>".$log->user->email."</td>\n" }}
+				<?php $property = ACTIONLOG_REPORT_USER_DISPLAY; ?>
+					{{ "<td class='user'>".$log->user->$property."</td>\n" }}
 				@endif
 				<td class="route">{{ $log->route }}</td>
 				<td class="method">{{ $log->method }}</td>
