@@ -1,3 +1,8 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
 
 #report {
 
@@ -189,8 +194,49 @@ table.sub_post_data tr:last-child td {
 	border: 1px solid #999;
 }
 
+#navbar {
+	background-color: #646669;
+	color: #FFF;
+	padding: 10px;
+}
+
 td.notification {
 	font-size: 1.5em;
 	padding: 10px 20px;
 	text-align: center;
+}
+
+.title  {
+	width: 300px;
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-size: 2em;
+	position: relative;
+	left: 30px;
+	text-shadow: 1px 1px 1px #000;
+	float: left;
+}
+
+.strong {
+	font-weight: 700;
+}
+
+.weak {
+	font-weight: 300;
+}
+
+.back {
+	float: right;
+	width: 300px;
+	text-align: right;
+	padding-right: 50px;
+	position: relative;
+	top: 7px;
+}
+
+.back a {
+	text-decoration: none;
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-size: 1.5em;
+	text-shadow: 1px 1px 1px #000;
+	color: #FFF;
 }

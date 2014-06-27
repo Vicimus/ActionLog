@@ -4,10 +4,18 @@
 		 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		 <script src="{{ URL::asset('packages/quintile/actionlog/assets/js/report.js') }}"></script>
 		 <link href="{{ URL::asset('packages/quintile/actionlog/assets/css/report.css') }}" rel="stylesheet">
+
+		 <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
 		 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
 @section('content')
+
+<div id="navbar">
+	<div class="title"><span class="strong">Action</span><span class="weak">Log</span></div>
+	<div class="back"><a href="{{ URL::previous()}}">Return Back</a></div>
+	<div style="clear: both; height: 0px"></div>
+</div>
 
 <div id="topbar">
 	<div id="search">
