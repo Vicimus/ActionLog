@@ -11,16 +11,24 @@ Register any routes you'd like to log in your app/filters.php, inside App::befor
  	
 ### USE 
 
-```ActionLog::register( PACKAGE_NAME,  ROUTE,  GET || POST , NAME_FOR_ACTION ) ;```
+```php
+ActionLog::register( PACKAGE_NAME,  ROUTE,  GET || POST , NAME_FOR_ACTION ) ;
+```
 		
-```PACKAGE_NAME```
+```
+PACKAGE_NAME
+```
 This is if you want to track routes handled by other packages. You can give it
 any name.
 
-```ROUTE```
+```
+ROUTE
+```
 This is the route that's going to be tracked. Must be exactly as the route is defined.
 
-```GET || POST```
+```
+GET || POST
+```
 Specify which method you'd like to track. Must be either 'GET' or 'POST'
 
 NAME_FOR_ACTION
@@ -41,7 +49,9 @@ You can force the Log to record all actions:
 Action's that have been registered will still be logged with those names, but
 anything that doesn't match a name will be logged with the name:
 
-```ROUTE_METHOD (ie. 'dashboard/unicorns_GET' )```
+```
+ROUTE_METHOD (ie. 'dashboard/unicorns_GET' )
+```
 
 
 ```php
@@ -110,7 +120,9 @@ log would record without recording post data.
 
 The default route to view ActionLog reports is:
 
-```'actionlog/report'```
+```
+'actionlog/report'
+```
 
 You can hijack the default route for viewing the reports:
 
