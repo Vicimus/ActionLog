@@ -14,7 +14,7 @@
 		static public $names = array();
 
 		//Routing
-		static public $route = "actionlog/report";
+		static public $route = "dashboard/actionlog/report";
 
 		static private $force = false;
 		static private $track_post = true;
