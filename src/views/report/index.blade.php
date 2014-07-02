@@ -2,8 +2,8 @@
 	<head>
 		<title>ActionLog Report</title>
 		 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		 <script src="{{ URL::asset('packages/quintile/actionlog/assets/js/report.js') }}"></script>
-		 <link href="{{ URL::asset('packages/quintile/actionlog/assets/css/report.css') }}" rel="stylesheet">
+		 <script src="{{ URL::asset('packages/quintile/actionlog/js/report.js') }}"></script>
+		 <link href="{{ URL::asset('packages/quintile/actionlog/css/report.css') }}" rel="stylesheet">
 
 		 <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
 		 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
@@ -55,7 +55,7 @@
 
 			@foreach($data as $log)
 
-			<tr class="row">
+			<tr class="row" rowid="{{$log->id}}">
 				<td class="app">{{ $log->application }}</td>
 				<td class="pkg">{{ $log->package }}</td>
 				<td class="actn">{{ $log->action_name }}</td>

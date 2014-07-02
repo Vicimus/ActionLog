@@ -106,7 +106,19 @@ function searchReport(value, type){
 		
 	$(not_match).hide();
 	$(match).show();
-		
+	
+
+	//hide post data tables that aren't matches
+	
+	$(not_match).each(function(index){
+
+		var children = $('tr[owner="'+$(this).attr('rowid')+'"]');
+		if(children.length > 0){
+			children.remove();
+			$('a.post_data[logid='+$(this).attr('rowid')+']').text('Preview');
+		}
+	});
+
 	if(match.length == 0)
 		return false;
 	else
