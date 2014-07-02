@@ -121,7 +121,7 @@ log would record without recording post data.
 The default route to view ActionLog reports is:
 
 ```
-'actionlog/report'
+'dashboard/actionlog/report'
 ```
 
 You can hijack the default route for viewing the reports:
@@ -129,5 +129,5 @@ You can hijack the default route for viewing the reports:
 Add to your apps route folder:
 
 ```php
-Route::get('WHATEVER', 'Quintile\ActionLog\ReportController@index');
+Route::get('WHATEVER', 'Vicimus\ActionLog\ReportController@index');
 ```
