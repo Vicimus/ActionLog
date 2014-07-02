@@ -1,4 +1,4 @@
-<?php namespace Quintile\ActionLog;
+<?php namespace Vicimus\ActionLog;
 
 class Application {
 

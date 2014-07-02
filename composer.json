@@ -1,5 +1,5 @@
 {
-    "name": "Quintile/ActionLog",
+    "name": "Vicimus/ActionLog",
     "description": "",
     "authors": [
         {
@@ -19,7 +19,7 @@
             "src/models"
         ],
         "psr-0": {
-            "Quintile\\ActionLog\\": "src/"
+            "Vicimus\\ActionLog\\": "src/"
         }
     },
     "minimum-stability": "stable"

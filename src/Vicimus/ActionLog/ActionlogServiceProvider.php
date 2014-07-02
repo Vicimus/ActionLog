@@ -1,4 +1,4 @@
-<?php namespace Quintile\ActionLog;
+<?php namespace Vicimus\ActionLog;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -18,7 +18,7 @@ class ActionLogServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('quintile/actionlog');
+		$this->package('vicimus/actionlog');
 
 		if(defined('\ACTIONLOG_ROUTE_PREFIX'))
 			ActionLog::$route = \ACTIONLOG_ROUTE_PREFIX.ActionLog::$route;
@@ -29,8 +29,6 @@ class ActionLogServiceProvider extends ServiceProvider {
 			ActionLog::Log();
 		});
 
-
-		
 	}
 
 	/**

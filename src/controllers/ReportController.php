@@ -1,4 +1,4 @@
-<?php namespace Quintile\ActionLog;
+<?php namespace Vicimus\ActionLog;
 
 if(!defined('ACTIONLOG_REPORT_USER_DISPLAY'))
 	define('ACTIONLOG_REPORT_USER_DISPLAY', 'email');

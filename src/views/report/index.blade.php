@@ -2,8 +2,8 @@
 	<head>
 		<title>ActionLog Report</title>
 		 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		 <script src="{{ URL::asset('packages/quintile/actionlog/js/report.js') }}"></script>
-		 <link href="{{ URL::asset('packages/quintile/actionlog/css/report.css') }}" rel="stylesheet">
+		 <script src="{{ URL::asset('packages/vicimus/actionlog/js/report.js') }}"></script>
+		 <link href="{{ URL::asset('packages/vicimus/actionlog/css/report.css') }}" rel="stylesheet">
 
 		 <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
 		 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>

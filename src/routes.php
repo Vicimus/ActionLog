@@ -1,5 +1,5 @@
 <?php
 
-Route::get(ActionLog::$route, 'Quintile\ActionLog\ReportController@index');
+Route::get(ActionLog::$route, 'Vicimus\ActionLog\ReportController@index');
 
 ?>
