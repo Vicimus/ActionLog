@@ -46,7 +46,7 @@ class ActionLogServiceProvider extends ServiceProvider {
 		\Event::listen('ui.navigation.after', function() {
 			\Navigation::assemble(
 				array(
-					'<i class="fa fa-desktop"></i> Action Log::#::made_up_thing' => array( // Parent Navigation Item
+					'<i class="fa fa-file-text-o"></i> Action Log::#::made_up_thing' => array( // Parent Navigation Item
 						'View Log Report::'.\URL::to(ActionLog::$route) => 'made_up_thing')
 				)
 			);
