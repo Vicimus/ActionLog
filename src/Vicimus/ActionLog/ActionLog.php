@@ -77,6 +77,49 @@
 			return !$this->hasNoMatch();
 		}
 
+		public static function ErrorLog($package, $name, $notes = null)
+		{
+			$al = new ActionLog();
+
+			//Set the name of the application
+			if(defined('APP_NAME'))
+				$al->application = APP_NAME;
+			else
+				$al->application = "Unspecified";
+
+			//Set the name of the package
+			$al->package = $package;
+
+			//Record the Session ID
+			$al->session_id = \Session::getId();
+
+			//Track the user if there is one logged in
+			if(isset(\Auth::user()->id))
+				$al->user_id = \Auth::user()->id;
+
+			//Set the name of the action
+			$al->action_name = $name;
+
+			//Set the route (the URL)
+			$al->route = \Request::path();
+
+			//Set the POST data
+			if(count($_POST))
+			{	
+				$post_data = $_POST;
+				foreach($post_data as $key => &$value)
+					if(stripos($key, 'password') !== false)
+						$value = \Hash::make($value);
+
+				$al->post_data .= json_encode($post_data);
+			}
+
+			$al->error = true;
+			$al->notes = $notes;
+			$al->save();
+			
+		}
+
 		public static function Log(){
 
 			//This stops it from recording into the database on uses of ARTISAN
