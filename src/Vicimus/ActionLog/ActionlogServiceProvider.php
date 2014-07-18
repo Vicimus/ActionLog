@@ -47,10 +47,14 @@ class ActionLogServiceProvider extends ServiceProvider {
 			\Navigation::assemble(
 				array(
 					'<i class="fa fa-file-text-o"></i> Action Log::#::made_up_thing' => array( // Parent Navigation Item
-						'View Log Report::'.\URL::to(ActionLog::$route) => 'made_up_thing')
+						'View Log Report::'.\URL::to(ActionLog::$route) => 'made_up_thing',
+						'View Error Log::'.\URL::to(ActionLog::$errorRoute) => 'blerp'
+						),
 				)
 			);
 		}, 40);
+
+
 	}
 
 	/**

@@ -15,6 +15,7 @@
 
 		//Routing
 		static public $route = "dashboard/actionlog/report";
+		static public $errorRoute = "dashboard/actionlog/errors";
 
 		static private $force = false;
 		static private $track_post = true;
@@ -118,6 +119,16 @@
 			$al->notes = $notes;
 			$al->save();
 			
+		}
+
+		public function getMethod()
+		{
+			return substr($this->action_name, strpos($this->action_name, "::") + 2);
+		}
+
+		public function getClass()
+		{
+			return substr($this->action_name, 0, strpos($this->action_name, "::"));
 		}
 
 		public static function Log(){
