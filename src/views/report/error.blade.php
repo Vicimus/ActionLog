@@ -68,6 +68,17 @@
             if($data->post_data)
             {
               $post = json_decode($data->post_data);
+              ?>
+              <table style="width: 100%" class="table-condensed table-bordered">
+                <tr>
+                  <td style="width: 40%"><strong>Property Name</strong></td>
+                  <td style="width: 60%"><strong>Property Value</strong></td>
+                </tr>
+              @foreach($post as $property => $value)
+              <tr><td>{{$property}}</td><td>{{$value}}</td></tr>
+              @endforeach
+            </table>
+          <?php
             }
             else
             {
@@ -75,15 +86,7 @@
               echo "No Post Data Present";
             }
           ?>
-          <table style="width: 100%" class="table-condensed table-bordered">
-            <tr>
-              <td style="width: 40%"><strong>Property Name</strong></td>
-              <td style="width: 60%"><strong>Property Value</strong></td>
-            </tr>
-          @foreach($post as $property => $value)
-          <tr><td>{{$property}}</td><td>{{$value}}</td></tr>
-          @endforeach
-        </table>
+          
         </p>
       </div>
     </div>

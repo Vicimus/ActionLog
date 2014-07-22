@@ -257,6 +257,8 @@
 			self::$require_auth = true;
 			//return new ActionLog();
 		}
+
+		
 	}
 
 ?>
