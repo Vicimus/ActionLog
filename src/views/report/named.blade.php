@@ -34,7 +34,14 @@
   			
   			<tr>
   				<td>{{$error->route}}</td>
-  				<td>{{$error->user->email}}</td>
+  				<td>
+              <?php
+              if(isset($error->user))
+                echo $error->user->email;
+              else
+                echo "";
+              ?>
+          </td>
   				<td>{{substr($error->session_id, 0, 9)}}</td>
   				<td>{{with(new DateTime($error->created_at))->format("F j, Y, g:i a")}}</td>
   				<td><a href="{{URL::route('actionlog.error', $error->id)}}">Detailed</a></td>
