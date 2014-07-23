@@ -43,11 +43,12 @@ class ActionLogServiceProvider extends ServiceProvider {
 			return new ActionLog;
 		});
 
+		//'View Log Report::'.\URL::to(ActionLog::$route) => 'made_up_thing',
+
 		\Event::listen('ui.navigation.after', function() {
 			\Navigation::assemble(
 				array(
 					'<i class="fa fa-file-text-o"></i> Action Log::#::made_up_thing' => array( // Parent Navigation Item
-						'View Log Report::'.\URL::to(ActionLog::$route) => 'made_up_thing',
 						'View Error Log::'.\URL::to(ActionLog::$errorRoute) => 'blerp'
 						),
 				)
