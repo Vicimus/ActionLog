@@ -47,7 +47,11 @@
 
       <div class="col-md-3">
           <h4>User</h4>
-          <p>{{ucfirst($data->user->username)}}</p>
+          @if($data->user === NULL)
+            <p>N/A</p>
+          @else
+            <p>{{ucfirst($data->user->username)}}</p>
+          @endif
       </div>
 
       <div class="col-md-6">
