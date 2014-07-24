@@ -262,7 +262,40 @@
 			//return new ActionLog();
 		}
 
-		
+		public static function getErrorFrequency($start = null, $end =  null)
+		{
+			\DealerLive\Reporting\Models\Report::convertDate($start, $end);
+
+			//Grab the days in which errors occurred
+			$days = ActionLog::select(\DB::raw('DATE(created_at) as datum'))->
+						where('error', true)->
+						whereBetween('created_at', array($start, $end))->
+						orderBy('datum')->
+						groupBy('datum')->get();
+
+
+			$errorData = array();
+			foreach($days as $day)
+			{
+
+				$results = ActionLog::select(\DB::raw('count(*) as count'))->
+							where('error', true)->
+							whereRaw('DATE(`created_at`) = \''.$day->datum.'\'')->first();
+				
+				$errorData[$day->datum] = $results->count;
+			}
+
+			$minDate = new \DateTime($days[0]->datum);
+			$maxDate = new \DateTime($days[count($days)-1]->datum);
+
+			for($curr = $minDate; $curr <= $maxDate; $curr->add(new \DateInterval('P1D')))
+				if(!array_key_exists($curr->format('Y-m-d'), $errorData))
+					$errorData[$curr->format('Y-m-d')] = 0;
+
+			ksort($errorData);
+			return $errorData;
+		}
+
 	}
 
 ?>

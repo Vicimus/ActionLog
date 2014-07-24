@@ -55,6 +55,16 @@ class ActionLogServiceProvider extends ServiceProvider {
 			);
 		}, 40);
 
+		\Event::listen('reporting.types', function(){
+			return new \DealerLive\Reporting\Models\ReportReference(
+					"\Vicimus\ActionLog\ActionLog",
+					null,
+					"line",
+					"getErrorFrequency",
+					"Error Frequency"
+				);
+		});
+
 
 	}
 
