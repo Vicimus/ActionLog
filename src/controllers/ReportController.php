@@ -65,7 +65,7 @@ class ReportController extends \BaseController {
 					count();
 			}
 		}	
-
+		
 		return \View::make('actionlog::report.errors', compact('data'));
 	}
 

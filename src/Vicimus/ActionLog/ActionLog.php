@@ -78,7 +78,7 @@
 			return !$this->hasNoMatch();
 		}
 
-		public static function ErrorLog($package, $name, $notes = null)
+		public static function ErrorLog($package, $name, $notes = null, $stack = null)
 		{
 			$al = new ActionLog();
 
@@ -117,13 +117,17 @@
 
 			$al->error = true;
 			$al->notes = $notes;
+			$al->stack_trace = $stack;
 			$al->save();
 			
 		}
 
 		public function getMethod()
 		{
-			return substr($this->action_name, strpos($this->action_name, "::") + 2);
+			if(strpos($this->action_name, "::"))
+				return substr($this->action_name, strpos($this->action_name, "::") + 2);
+			else
+				return $this->action_name;
 		}
 
 		public function getClass()

@@ -90,10 +90,17 @@
               echo "No Post Data Present";
             }
           ?>
-          
         </p>
       </div>
     </div>
+    @if($data->stack_trace)
+    <div class="row">
+      <div class="col-md-12">
+        <h4>Stack Trace</h4>
+        <p>{{$data->stack_trace}}</p>
+      </div>
+    </div>
+    @endif
 
   </div>
 </div>
