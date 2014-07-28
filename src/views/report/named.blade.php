@@ -18,26 +18,33 @@
   <div class="panel-heading">
     <?php
       $url = str_replace('%20', ' ', $_SERVER['REQUEST_URI']);
+      $url = str_replace('%28', '(', $url);
+      $url = str_replace('%29', ')', $url);
       $start = strrpos($url, '/') + 1;
       $end = strpos($url, '?');
       if(!$end) $end = strlen($url);
       $display = ucfirst(substr($url, $start, $end - $start));
       $checked = (isset($_GET['archived']) && $_GET['archived'] == "true") ? 'checked="checked"' : "";
+      $archiveDisabled = (isset($_GET['search'])) ? ' disabled="disabled"' : '';
     ?>
-    <label class="pull-right"><input type="checkbox" id="show_archives"{{$checked}} /> Show Archived Errors</label>
-    <h3 class="panel-title">{{$display}}</h3>
+    <label class="pull-right"><input type="checkbox" id="show_archives"{{$checked}}{{$archiveDisabled}} /> Show Archived Errors</label>
+    <h3 class="panel-title">{{$display}}
+      @if(isset($_GET['search']))
+        {{': '.$_GET['search']}}
+      @endif
+    </h3>
   </div>
   <div class="panel-body">
     @if(!count($data))
       <div style="text-align: center"><h3>No Unread Errors In This Category</h3></div>
     @else
-    <form action="" method="POST">
+    <form action="{{URL::route('actionlog.read', 'filler')}}" method="POST">
     	<table style="width: 100%; font-size: 12px;" class="table-condensed table-bordered table-striped">
 
     		<tbody>
     			<!-- didn't use TH/THEAD because the styling from the custom.css makes it look real ugly -->
     			<tr>
-            <td></td>
+            <td id="checkTop"></td>
     				<td><strong>Route</strong></td>
     				<td><strong>Brief</strong></td>
     				<td><strong>Date</strong></td>
@@ -69,10 +76,14 @@
     </div>
     <div style="text-align: center; margin-top: 20px">
       @if(isset($_GET['archived']))
-        {{$data->appends(array('archived' => $_GET['archived']))->links()}}
-      @else
-        {{$data->links()}}
+        <?php $data->appends(array('archived' => $_GET['archived'])); ?>
       @endif
+
+      @if(isset($_GET['search']))
+        <?php $data->appends(array('search' => $_GET['search'], 'search_archives' => $_GET['search_archives'])); ?>
+      @endif
+        {{$data->links()}}
+
     </div>
     <input type="hidden" name="method" id="method" />
   </form>
@@ -86,6 +97,11 @@
 
   $(document).ready(function(){
     if($(".error_check:checked").length > 0)
+      $("#delete").removeClass('disabled');
+  });
+
+  $("#checkTop").click(function(){
+      $(".error_check").prop('checked', true);
       $("#delete").removeClass('disabled');
   });
 

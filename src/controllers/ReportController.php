@@ -80,6 +80,27 @@ class ReportController extends \BaseController {
 
 	}
 
+	public function search()
+	{
+		$search = \Input::get('search');
+		$archives = (\Input::get('search_archives') == "on") ? true : false;
+
+		$search = explode(",", $search);
+		$results = ActionLog::where('error', true);
+
+		if(!$archives)
+			$results = $results->where('archive', false);
+		
+		foreach($search as $term)
+		{
+			$results = $results->where('notes', 'LIKE', '%'.$term.'%');
+		}
+
+		$results = $results->paginate(10);
+		$data = $results;
+		return \View::make('actionlog::report.named', compact('data'));
+
+	}
 	public function errors()
 	{
 		$appName = (defined('APP_NAME')) ? APP_NAME : 'Unspecified';

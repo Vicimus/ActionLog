@@ -11,7 +11,12 @@
 @section('content')   
 
 <div class="container" style="margin-top: 20px">
-
+<div id="search_pane" style="width: 50%; float: right; margin-bottom: 20px; text-align: right">
+  <form action="{{\URL::route('actionlog.search')}}" method="get" class="form-inline" id="search_form">
+    <label>Search: <input type="text" class="form-control" style="font-weight: normal" name="search"><button class="btn btn-default">Search</button></label><br />
+    <label><input type="checkbox" name="search_archives" checked="checked" /> Include Archived Errors</label>
+  </form>
+</div>
 <h2>Errors</h2>
 
 @foreach($data as $package => $action)
@@ -36,6 +41,22 @@
   </div>
 </div>
 @endforeach
+
+@if(!count($data))
+  <div style="text-align: center; clear: both">
+    <h3>There are currently no errors!</h3>
+    <h5>Congragulations on being awesome developers!</h5>
+  </div> 
+
+  <script type="text/javascript">
+
+    $(document).ready(function(){
+        $("#search_form input").prop('disabled', true);
+        $("#search_form button").prop('disabled', true);
+    });
+
+  </script>
+@endif
 </div>
 
 @stop
