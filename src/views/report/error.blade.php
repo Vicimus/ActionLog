@@ -8,10 +8,40 @@
 	
 @stop
 
-@section('content')   
+@section('content')  
+<?php
+//next and previous
+$showArchives = (isset($_GET['archived']) && $_GET['archived'] == "true") ? true : false;
 
+$next = $data->getNext($showArchives);
+$previous = $data->getPrevious($showArchives);
+$nextClass = "";
+$previousClass = "";
+
+if(!is_object($next))
+{
+  $next = '';
+  $nextClass = " disabled";
+}
+else
+    $next = \URL::route('actionlog.error', $next->id);
+
+if(!is_object($previous))
+{
+  $previous = "";
+  $previousClass = " disabled";
+}
+else
+    $previous = \URL::route('actionlog.error', $previous->id);
+
+ $archived = (isset($_GET['archived']) && $_GET['archived'] == "true") ? "?archived=true" : "";
+?>
 <div class="container" style="margin-top: 20px">
-<a href="{{URL::to(ActionLog::$errorRoute)}}/name/{{$data->action_name}}"><button class="btn btn-default pull-right">Go Back</button></a>
+<div style="margin-bottom: 10px; text-align: right; width: 50%; float: right">
+  <a href="{{$previous}}{{$archived}}" class="btn btn-default{{$previousClass}}">Previous Error</a> 
+  <a href="{{$next}}{{$archived}}" class="btn btn-default{{$nextClass}}">Next Error</a> 
+  <a href="{{\URL::route('actionlog.named', $data->action_name)}}{{$archived}}" class="btn btn-default">Go Back</a>
+</div>
 <h2>Errors</h2>
 
 <div class="panel panel-danger">
@@ -97,7 +127,7 @@
     <div class="row">
       <div class="col-md-12">
         <h4>Stack Trace</h4>
-        <p>{{$data->stack_trace}}</p>
+        <p>{{$data->stackTrace()}}</p>
       </div>
     </div>
     @endif

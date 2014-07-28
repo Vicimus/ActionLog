@@ -1,0 +1,16 @@
+tr.archived {
+	color: #BBB;
+	font-style: italic;
+	font-weight: normal;
+}
+
+a.archived {
+	color: #BBB;
+	font-weight: normal;
+}
+
+span.archived{
+	color: #BBB;
+	font-style: italic;
+	font-size: 0.8em;
+}

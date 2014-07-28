@@ -3,6 +3,10 @@ body {
 	padding: 0;
 }
 
+.archived {
+	color: #666;
+	font-style: italic;
+}
 
 #report {
 

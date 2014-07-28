@@ -27,7 +27,7 @@
     		@foreach($action as $method => $error)
         <tr>
     			<td style="width: 60%">{{$method}}</td>
-    			<td style="width: 20%">{{$error}} errors</td>
+    			<td style="width: 20%">{{$error - \Vicimus\ActionLog\ActionLog::getArchivedErrorsByName($package, $method)}} new errors <span class="archived">/ {{\Vicimus\ActionLog\ActionLog::getArchivedErrorsByName($package, $method)}} archived</span></td>
     			<td style="width: 20%"><a href="{{URL::route('actionlog.named', $method)}}">View Errors In Detail</a></td>
         </tr>
     		@endforeach
