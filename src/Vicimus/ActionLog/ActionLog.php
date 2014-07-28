@@ -21,6 +21,64 @@
 		static private $track_post = true;
 		static private $require_auth = false;
 
+		public function brief()
+		{
+			return substr($this->notes, 0, 75);
+		}
+
+		public function getPrevious($archived = false)
+		{
+			$previous = ActionLog::where('created_at', '>=', $this->created_at)->
+								where('id', '!=', $this->id)->
+								where('error', true)->
+								where('action_name', $this->action_name)->
+								where('application', $this->application);
+			if(!$archived)
+				$previous = $previous->where('archive', false);
+			$previous = $previous->orderBy('created_at')->first();
+			return $previous;
+		}
+
+		public static function getTotalErrorsByName($pkg, $name)
+		{
+			$appName = (defined('APP_NAME')) ? APP_NAME : 'Unspecified';
+			return ActionLog::with('user')->
+					where('package', '=', $pkg)->
+					where('application', '=', $appName)->
+					where('action_name', '=', $name)->
+					where('error', '=', true)->
+					count();
+		}
+
+		public static function getArchivedErrorsByName($pkg, $name)
+		{
+
+			$appName = (defined('APP_NAME')) ? APP_NAME : 'Unspecified';
+			return ActionLog::with('user')->
+					where('package', '=', $pkg)->
+					where('application', '=', $appName)->
+					where('action_name', '=', $name)->
+					where('error', '=', true)->
+					where('archive', true)->
+					count();
+
+		}
+
+		public function getNext($archived = false)
+		{
+			$next = ActionLog::where('created_at', '<=', $this->created_at)->
+									where('id', '!=', $this->id)->
+									where('error', true)->
+									where('action_name', $this->action_name)->
+									where('application', $this->application);
+
+			if(!$archived)
+				$next = $next->where('archive', false);
+			
+			$next = $next->orderBy('created_at', 'DESC')->first();
+			return $next;
+		}
+
 		public static function makeFromAction(Action $action){
 
 			$al = new ActionLog();
@@ -66,6 +124,11 @@
 				$al->post_data .= json_encode($action->extracted);
 
 			return $al;
+		}
+
+		public function stackTrace()
+		{
+			return str_replace("#", "<br /><br />#", $this->stack_trace);
 		}
 
 		public function hasNoMatch(){

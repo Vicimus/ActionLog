@@ -12,14 +12,60 @@ class ReportController extends \BaseController {
 	
 	}
 
+	public function read($name)
+	{
+		$appName = (defined('APP_NAME')) ? APP_NAME : "Unspecified";
+
+		if(\Input::get('method') == "delete")
+		{
+			foreach(\Input::get('errors') as $id => $on)
+			{
+				$current = \Vicimus\ActionLog\ActionLog::find($id);
+				$current->delete();
+			}
+		}
+		elseif(\Input::get('method') == "mark")
+		{
+			if(!is_array(\Input::get('errors')))
+			{
+				$errors = \Vicimus\ActionLog\ActionLog::where('action_name', $name)->
+							where('archive', false)->
+							where('application', $appName)->get();
+				foreach($errors as $err)
+				{
+					$err->archive = true;
+					$err->save();
+				}
+
+				return \Redirect::back();
+			}
+
+			foreach(\Input::get('errors') as $id => $on)
+			{
+				$current = \Vicimus\ActionLog\ActionLog::find($id);
+				$current->archive = true;
+				$current->save();
+			}
+		}
+
+		return \Redirect::back();
+	}
+
 	public function named($name)
 	{
 		$appName = (defined('APP_NAME')) ? APP_NAME : "Unspecified";
 
+		$archived = (isset($_GET['archived']) && $_GET['archived'] == "true") ? true : false;
+
 		$data = ActionLog::with('user')->
 				where('application', '=', $appName)->
-				where('action_name', '=', $name)->
-				get();
+				where('action_name', '=', $name);
+
+		if(!$archived)
+			$data = $data->where('archive', false);
+		$data = $data->orderBy('archive')->
+				orderBy('created_at', 'DESC')->
+				paginate(10);
 
 		return \View::make('actionlog::report.named', compact('data'));
 	}
@@ -28,6 +74,8 @@ class ReportController extends \BaseController {
 	{
 
 		$data = ActionLog::with('user')->find($id);
+		$data->archive = true;
+		$data->save();
 		return \View::make('actionlog::report.error', compact('data'));
 
 	}
