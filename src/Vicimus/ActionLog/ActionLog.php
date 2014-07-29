@@ -368,7 +368,7 @@ class ActionLog extends \Eloquent
 
 	public function notify()
 	{
-		\Vicimus\ActionLog\Models\Subscription::notification($this);
+		return \Vicimus\ActionLog\Models\Subscription::notification($this);
 	}
 
 }

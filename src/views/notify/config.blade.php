@@ -97,8 +97,7 @@
 								foreach($s->included() as $w)
 								{
 									echo $w;
-									$count++;
-									if($count < count($s->included()))
+									if(++$count < count($s->included()))
 										echo ', ';
 								}
 								?>
@@ -109,8 +108,7 @@
 								foreach($s->excluded() as $w)
 								{
 									echo $w;
-									$count++;
-									if($count < count($s->excluded()))
+									if(++$count < count($s->excluded()))
 										echo ', ';
 								}
 								?>

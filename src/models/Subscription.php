@@ -50,6 +50,7 @@ class Subscription extends \Eloquent
 
 		foreach($this->included() as $keyword)
 			$matches = $matches->where('notes', 'LIKE', '%'.$keyword.'%');
+
 		foreach($this->excluded() as $keyword)
 			$matches = $matches->where('notes', 'NOT LIKE', '%'.$keyword.'%');
 
@@ -64,18 +65,18 @@ class Subscription extends \Eloquent
 		foreach($subs as $s)
 		{
 			if($s->isMatch($action)){
-				$s->notify();
+				$s->notify($action);
 				$count++;
-			}
-				
+			}	
 		}
 		return $count;
 	}
 
-	public function notify()
+	public function notify(\Vicimus\ActionLog\ActionLog $action)
 	{
-		//this is where the emailing goes
-		return true;
+		\Mail::send('actionlog::notify.email', array('action' => $action), function($message){
+			$message->to($this->email)->subject('Error Notification');
+		});
 	}
 }
 
