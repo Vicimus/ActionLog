@@ -28,7 +28,6 @@ class ActionLogServiceProvider extends ServiceProvider {
 		\Event::listen('ActionLog.Log', function(){
 			ActionLog::Log();
 		});
-
 	}
 
 	/**
@@ -49,11 +48,14 @@ class ActionLogServiceProvider extends ServiceProvider {
 			\Navigation::assemble(
 				array(
 					'<i class="fa fa-file-text-o"></i> Action Log::#::made_up_thing' => array( // Parent Navigation Item
-						'View Error Log::'.\URL::to(ActionLog::$errorRoute) => 'blerp'
+						'View Error Log::'.\URL::to(ActionLog::$errorRoute) => 'blerp',
+						'Notifications::'.\URL::to(ActionLog::$errorRoute.'/notifications') => 'blerg',
 						),
 				)
 			);
 		}, 40);
+
+
 
 		\Event::listen('reporting.types', function(){
 			return new \DealerLive\Reporting\Models\ReportReference(

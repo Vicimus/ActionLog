@@ -47,7 +47,7 @@ else
 <div class="panel panel-danger">
   <div class="panel-heading">
      <div class="pull-right">{{with(new DateTime($data->created_at))->format("F j, Y, g:i a")}}</div>
-    <h3 class="panel-title">Error #{{$data->id}}</h3>
+    <h3 class="panel-title">Error #{{$data->id}} <small>(<a href="{{URL::route('actionlog.notify')}}?r={{$data->route}}" class="danger">Subscribe</a>)</small></h3>
 
   </div>
   <div class="panel-body">

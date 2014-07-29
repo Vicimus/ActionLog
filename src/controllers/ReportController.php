@@ -109,6 +109,7 @@ class ReportController extends \BaseController {
 						select('package')->
 						where('application', '=', $appName)->
 						where('error', '=', true)->
+						whereNull('deleted_at')->
 						groupBy('package')->
 						get();
 

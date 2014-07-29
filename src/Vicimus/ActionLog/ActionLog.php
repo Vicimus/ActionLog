@@ -188,6 +188,7 @@ class ActionLog extends \Eloquent
 		$al->notes = $notes;
 		$al->stack_trace = $stack;
 		$al->save();
+		$el->notify();
 		
 	}
 
@@ -363,6 +364,11 @@ class ActionLog extends \Eloquent
 
 		ksort($errorData);
 		return $errorData;
+	}
+
+	public function notify()
+	{
+		\Vicimus\ActionLog\Models\Subscription::notification($this);
 	}
 
 }
