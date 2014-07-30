@@ -61,6 +61,14 @@
 			</div>
 
 			{{ Form::close()}}
+
+			<div class="well">
+				<h5>Route</h5>
+				<p>Route is the main method of subscribing to an error. Wildcards can be used to match many routes with one subscription. Wildcards are the asterisk (*) and can be used like: inventory/* or inven*, etc.</p>
+
+				<h5>Keywords</h5>
+				<p>Keywords are words or phrases that will be searched for within the error messages (not the stack trace). Words can be separated by commas to include multiple words. To exclude errors that contain a word, simply place an exclamation mark before the word, and any error containing that word will be ignored.</p>
+			</div>
 		</div>
 		<div class="col-md-10">
 			<div class="pull-right">

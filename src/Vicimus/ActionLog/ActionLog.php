@@ -188,7 +188,7 @@ class ActionLog extends \Eloquent
 		$al->notes = $notes;
 		$al->stack_trace = $stack;
 		$al->save();
-		$el->notify();
+		$al->notify();
 		
 	}
 
