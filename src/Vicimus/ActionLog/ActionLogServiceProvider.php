@@ -28,6 +28,10 @@ class ActionLogServiceProvider extends ServiceProvider {
 		\Event::listen('ActionLog.Log', function(){
 			ActionLog::Log();
 		});
+
+		\Event::listen('ActionLog.PageView', function(){
+			\Vicimus\ActionLog\Models\PageView::Log();
+		});
 	}
 
 	/**
@@ -66,6 +70,8 @@ class ActionLogServiceProvider extends ServiceProvider {
 					"Error Frequency"
 				);
 		});
+
+		
 
 
 	}
