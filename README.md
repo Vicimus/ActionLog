@@ -1,133 +1,61 @@
-### ACTION LOG REGISTRATION 
-	 	
-For use in Laravel 4 applications.
+### Action Log
 
-Register any routes you'd like to log in your app/filters.php, inside App::before()
+Action Log has changed a lot since it was first created, and now serves two purposes.
 
-```php
-  In App::after() place: 
- 	Event::fire('ActionLog.Log');
-```
- 	
-### USE 
+* Error Logging (with Notifications)
+* Page View Tracking
 
-```php
-ActionLog::register( PACKAGE_NAME,  ROUTE,  GET || POST , NAME_FOR_ACTION ) ;
-```
-		
-```
-PACKAGE_NAME
-```
-This is if you want to track routes handled by other packages. You can give it
-any name.
+Error Logging
+-------------
 
-```
-ROUTE
-```
-This is the route that's going to be tracked. Must be exactly as the route is defined.
-
-```
-GET || POST
-```
-Specify which method you'd like to track. Must be either 'GET' or 'POST'
-
-NAME_FOR_ACTION
-This is an easy to read name to summarize the action that's taking place. For example
-if you were tracking the route that makes a user log into your application, you could name
-		it "user_login", so when viewing data you know right away what that action was doing.
-
-
-
-### OPTIONS
-		
-```php
-ActionLog::LogEverything();
-```
-
-You can force the Log to record all actions:
-
-Action's that have been registered will still be logged with those names, but
-anything that doesn't match a name will be logged with the name:
-
-```
-ROUTE_METHOD (ie. 'dashboard/unicorns_GET' )
-```
-
+Add the following to your `app/start/global.php` file:
 
 ```php
-ActionLog::IgnorePostData();
+App::error(function(Exception $exception, $code)
+{
+	//Only redirect and log in production
+	if(Config::get('app.debug'))
+		return;
+	
+    switch ($code)
+    {
+        default:
+        	$generalMessage = "Unfortunately there was an error";
+        	ActionLog::errorLog("Core", "General Error", $exception->getMessage(), $exception->__toString());
+            return Response::view('404', array('message' => $generalMessage), 500);
+    }
+});
 ```
 
-By default, if a POST method is being logged, it will insert the post
-data into the database (with passwords hashed, and data json encoded).
-You can stop this by calling IgnorePostData.
+This enables the error logging. It doesn't record errors in debug mode (instead it will display the normal error pages). It records the error into the database, and then redirects to the 404 view with the error message.
 
-This should be placed above any registers for predictable results.
+You can view the errors in the dashboard under `Action Log -> View Error Log`.
+
+Notifications
+-------------
+
+You can subscribe to routes or keywords (in error messages) and be notified by email when these errors occur. These notifications can be setup through the dashboard under `Action Log -> Notifications`. The page contains instructions for creating notifications.
+
+Page Views
+----------
+
+Add the following to your `app/filters.php` file:
 
 ```php
-ActionLog::register()->IgnorePostData();
+App::after(function($request, $response)
+{
+	\Event::fire('ActionLog.PageView');
+});
 ```
 
-You can set individual actions to ignore post data. For example in a blog,
-if you wanted to generally capture post data (user registration, searches) but
-didn't want to capture what could be large amounts of data (articles) you could
-specifically ignore that action.
+This enables tracking of page views. There are some default options that restrict what is tracked, but these can be changed in the dashboard under `Configuration -> Page Views` and checking/unchecking whatever options you want.
 
-```php
-ActionLog::register("package", "route", "POST", "post_blog")->IgnorePostData();
+By default:
 
-ActionLog::register()->TrackPostData();
-```
+* Requests for assets are ignored (css/js/image files)
+* Requests for the 404 page are not recorded.
+* Requests using the POST method are not recorded since a page isn't being displayed or explicitly requested by the user.
+* Session IDs are shortened to help readability.
+* Requests by the Super Admin are recorded but this can be disabled, as it can skew the data.
 
-If you've set ActionLog::IgnorePostData(), you can individually set registered
-actions to Track Post Data. This is optimal if you want to ignore the majority
-of actions post data, but want to track a few.
-
-```php
-ActionLog::RequireAuth();
-```
-
-This will ignore any routes, including those registered, if the current user is not
-logged into your application.
-
-```php
-ActionLog::register()->RequireAuth();
-```
-
-This will tell that individual action to only record if the current user is logged in
-to your application.
-
-```php
-ActionLog::register()->RequireAuth(false);
-```
-
-If the global ActionLog::RequireAuth() is set, calling this will force the action
-to record even if the user isn't logged in to your application.
-
-#### NOTE:
-
-You can chain conditions on a register:
-
-```php
-ActionLog::register()->IgnorePostData()->RequireAuth();
-```
-
-If this was for a login form submission, it would no longer record
-logs for failed submission attempts, and when an attempt succeeded, the
-log would record without recording post data.
-
-### REPORTS
-
-The default route to view ActionLog reports is:
-
-```
-'dashboard/actionlog/report'
-```
-
-You can hijack the default route for viewing the reports:
-
-Add to your apps route folder:
-
-```php
-Route::get('WHATEVER', 'Vicimus\ActionLog\ReportController@index');
-```
+You can view the page view data through the dashboard under `Action Log -> View Page Data`
