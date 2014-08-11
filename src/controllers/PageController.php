@@ -20,6 +20,19 @@ class PageController extends \BaseController
 		if(\DealerLive\Config\Helper::check('action_page_assets') != 'true')
 			$pageData = $pageData->where('route', 'NOT LIKE', 'assets%');
 
+		if(\DealerLive\Config\Helper::check('action_page_admin') == 'true')
+		{
+			$users = \Role::find(\DB::table('roles')->select('id')->where('name', 'Super Admin')->first()->id)->users()->get();
+			$ids = array();
+			foreach($users as $u)
+			{
+				$ids[] = $u->id;
+			}
+
+			$pageData = $pageData->whereNotIn('user_id', $ids);
+		}
+			
+
 
 		$pageData = $pageData->get();
 
