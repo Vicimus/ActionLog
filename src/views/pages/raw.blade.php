@@ -5,7 +5,7 @@
 @section('subtitle', 'Raw Page Data')
 
 @section('title-right')
-	
+	<a class="btn btn-primary pull-right" href="{{\URL::to('dashboard/config/pageviews')}}">Options</a>
 @stop
 
 @section('content') 
