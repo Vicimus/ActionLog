@@ -38,7 +38,7 @@
     @if(!count($data))
       <div style="text-align: center"><h3>No Unread Errors In This Category</h3></div>
     @else
-    <form action="{{URL::route('actionlog.read', 'filler')}}" method="POST">
+    <form action="{{URL::route('actionlog.read', $data->_name)}}" method="POST">
     	<table style="width: 100%; font-size: 12px;" class="table-condensed table-bordered table-striped">
 
     		<tbody>

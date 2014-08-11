@@ -29,7 +29,7 @@ class ReportController extends \BaseController {
 			if(!is_array(\Input::get('errors')))
 			{
 				$errors = \Vicimus\ActionLog\ActionLog::where('action_name', $name)->
-							where('archive', false)->
+							where('archive', 0)->
 							where('application', $appName)->get();
 				foreach($errors as $err)
 				{
@@ -67,6 +67,8 @@ class ReportController extends \BaseController {
 				orderBy('created_at', 'DESC')->
 				paginate(10);
 
+		$data->_name = $name;
+
 		return \View::make('actionlog::report.named', compact('data'));
 	}
 
@@ -96,7 +98,7 @@ class ReportController extends \BaseController {
 			$results = $results->where('notes', 'LIKE', '%'.$term.'%');
 		}
 
-		$results = $results->paginate(10);
+		$results = $results->paginate(40);
 		$data = $results;
 		return \View::make('actionlog::report.named', compact('data'));
 
