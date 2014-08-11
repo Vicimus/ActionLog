@@ -22,6 +22,7 @@ class CreateActionPageTable extends Migration {
 			$table->string('route');
 			$table->string('request_id')->nullable();
 			$table->integer('views')->default(1);
+			$table->string('method');
 			$table->timestamps();
 		});
 	}
