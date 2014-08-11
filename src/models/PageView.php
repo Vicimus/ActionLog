@@ -11,16 +11,23 @@ class PageView extends \Eloquent
 	{
 
 		//We want to ignore assets by default
-		if(!\DealerLive\Config\Helper::check('action_page_assets') == 'true')
+		if(\DealerLive\Config\Helper::check('action_page_assets') != 'true')
 			if(\Request::segment(1) == "assets")
 				return;
 		
-
 		//We want to ignore 404s because these can be caused behind the scenes in resource requests or ajax calls.
-		if(!\DealerLive\Config\Helper::check('action_page_404') == 'true')
+		if(\DealerLive\Config\Helper::check('action_page_404') != 'true')
 			if(\Request::segment(1) == "404")
 				return;
 		
+		//We want to ignore POST requests because they're not technically anyone viewing a page
+		if(\DealerLive\Config\Helper::check('action_page_post') != 'true')
+			if(\Request::isMethod('post'))
+				return;
+
+		//We might want to ignore page views from admins
+		if(\Auth::check() && \Auth::user()->hasRole('Super Admin') && \DealerLive\Config\Helper::check('action_page_admin') == 'true')
+			return;
 
 		$session_id = \Session::getId();
 		$route = \Request::path();
@@ -44,6 +51,7 @@ class PageView extends \Eloquent
 			$log->request_id = $request_id;
 			$log->views = 1;
 			$log->category = $category;
+			$log->method = \Request::method();
 			$log->save();
 		}
 	}

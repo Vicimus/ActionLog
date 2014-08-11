@@ -1,4 +1,7 @@
 <?php
+Route::get(ActionLog::$route.'/pages', array('as' => 'actionlog.pages.index', 'uses' => 'Vicimus\ActionLog\Controllers\PageController@index'));
+Route::get(ActionLog::$route.'/pages/raw', array('as' => 'actionlog.pages.raw', 'uses' => 'Vicimus\ActionLog\Controllers\PageController@raw'));
+Route::get(ActionLog::$route.'/pages/{category}', array('as' => 'actionlog.pages.category', 'uses' => 'Vicimus\ActionLog\Controllers\PageController@category'));
 
 Route::get(ActionLog::$route, 'Vicimus\ActionLog\ReportController@index');
 
@@ -14,4 +17,5 @@ Route::get(ActionLog::$errorRoute.'/search', array('as' => 'actionlog.search', '
 Route::get(ActionLog::$errorRoute.'/{id}', array('as' => 'actionlog.error', 'uses' => 'Vicimus\ActionLog\ReportController@error'));
 
 Route::post(ActionLog::$errorRoute.'/name/{action}', array('as' => 'actionlog.read', 'uses' => 'Vicimus\ActionLog\ReportController@read'));
+
 ?>
