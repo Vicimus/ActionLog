@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
 tr.archived {
 	color: #BBB;
 	font-style: italic;
@@ -33,6 +35,8 @@ table.logtable>tbody>tr>td {
 
 table.logtable>thead:first-child>tr:first-child>th {
 	border-top: 0px;
+	background-color: #333;
+	color: #FFF;
 
 }
 
@@ -47,4 +51,17 @@ table.logtable>thead>tr>th {
 
 table.logtable {
 	width: 100%;
+	border: 1px solid #DDD;
+	background-color: #FFF;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+}
+
+
+div.options > ul > li > label {
+	font-family: "Open Sans", sans-serif;
+	color: #000;
+	font-weight: 400;
+	font-size: 14px;
 }
