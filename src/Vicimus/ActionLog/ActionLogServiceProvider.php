@@ -52,6 +52,7 @@ class ActionLogServiceProvider extends ServiceProvider {
 			\Navigation::assemble(
 				array(
 					'<i class="fa fa-file-text-o"></i> Action Log::#::made_up_thing' => array( // Parent Navigation Item
+						'View Page Data::'.\URL::to(ActionLog::$route.'/pages') => 'blerg',
 						'View Error Log::'.\URL::to(ActionLog::$errorRoute) => 'blerp',
 						'Notifications::'.\URL::to(ActionLog::$errorRoute.'/notifications') => 'blerg',
 						),
@@ -59,7 +60,12 @@ class ActionLogServiceProvider extends ServiceProvider {
 			);
 		}, 40);
 
-
+		\Event::listen('config.nav', function(){
+			\DealerLive\Config\Helper::assemble_nav('Page Views::'.\URL::to('dashboard/config/pageviews'), 'dev');
+		}, 1);
+		\Event::listen('config.build.pageviews', function(){
+			return 'actionlog::pageviews';
+		}, 1);
 
 		\Event::listen('reporting.types', function(){
 			return new \DealerLive\Reporting\Models\ReportReference(
