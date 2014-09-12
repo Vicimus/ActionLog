@@ -17,5 +17,3 @@ Route::get(ActionLog::$errorRoute.'/search', array('as' => 'actionlog.search', '
 Route::get(ActionLog::$errorRoute.'/{id}', array('as' => 'actionlog.error', 'uses' => 'Vicimus\ActionLog\ReportController@error'));
 
 Route::post(ActionLog::$errorRoute.'/name/{action}', array('as' => 'actionlog.read', 'uses' => 'Vicimus\ActionLog\ReportController@read'));
-
-?>

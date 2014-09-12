@@ -1,6 +1,7 @@
 <?php namespace Vicimus\ActionLog;
 
 use Illuminate\Support\ServiceProvider;
+use \DealerLive\Reporting\Models\ReportReference;
 
 class ActionLogServiceProvider extends ServiceProvider {
 
@@ -27,10 +28,6 @@ class ActionLogServiceProvider extends ServiceProvider {
 
 		\Event::listen('ActionLog.Log', function(){
 			ActionLog::Log();
-		});
-
-		\Event::listen('ActionLog.PageView', function(){
-			\Vicimus\ActionLog\Models\PageView::Log();
 		});
 	}
 
@@ -68,25 +65,59 @@ class ActionLogServiceProvider extends ServiceProvider {
 		}, 1);
 
 		\Event::listen('reporting.types', function(){
-			return new \DealerLive\Reporting\Models\ReportReference(
-					"\Vicimus\ActionLog\ActionLog",
-					null,
-					"line",
-					"getErrorFrequency",
-					"Error Frequency"
+			return new ReportReference(
+				'\Vicimus\ActionLog\Models\PageView',
+				null,
+				"table",
+				"reportPageViews",
+				"Daily Page Views Report",
+				array('nodates'));
+		});
+
+		\Event::listen('reporting.types', function(){
+			return new ReportReference(
+				'\Vicimus\ActionLog\Models\VehicleView',
+				array(false),
+				'table',
+				'reportVehicleViews',
+				'Vehicle View Report'
 				);
 		});
 
-		
+		\Event::listen('reporting.types', function(){
+			return new ReportReference(
+				'\Vicimus\ActionLog\Models\VehicleView',
+				array(true),
+				'table',
+				'reportVehicleViews',
+				'Daily Vehicle View Report',
+				array('nodates')
+				);
+		});
 
+		\Event::listen('reporting.types', function(){
+			return new ReportReference(
+				'\Vicimus\ActionLog\Models\VehicleView',
+				array(true),
+				'table',
+				'reportModelViews',
+				'Daily Model View Report',
+				array('nodates')
+				);
+		});
+
+		\Event::listen('reporting.types', function(){
+			return new ReportReference(
+				'\Vicimus\ActionLog\Models\VehicleView',
+				array(false),
+				'table',
+				'reportModelViews',
+				'Model View Report'
+				);
+		});
 
 	}
 
-	/**
-	 * Get the services provided by the provider.
-	 *
-	 * @return array
-	 */
 	public function provides()
 	{
 		return array('actionlog');

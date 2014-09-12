@@ -7,62 +7,53 @@ class PageView extends \Eloquent
 	protected $table = 'action_page';
 	protected $guarded = array();
 
-	public static function Log()
+	
+	public static function Log($page_id)
 	{
-
-		//We want to ignore assets by default
-		if(\DealerLive\Config\Helper::check('action_page_assets') != 'true')
-			if(\Request::segment(1) == "assets")
-				return;
-		
-		//We want to ignore 404s because these can be caused behind the scenes in resource requests or ajax calls.
-		if(\DealerLive\Config\Helper::check('action_page_404') != 'true')
-			if(\Request::segment(1) == "404")
-				return;
-		
-		//We want to ignore POST requests because they're not technically anyone viewing a page
-		if(\DealerLive\Config\Helper::check('action_page_post') != 'true')
-			if(\Request::isMethod('post'))
-				return;
-
-		//We might want to ignore page views from admins
-		if(\Auth::check() && \Auth::user()->hasRole('Super Admin') && \DealerLive\Config\Helper::check('action_page_admin') == 'true')
-			return;
-
-		$session_id = \Session::getId();
-		$route = \Request::path();
-		$request_id = self::getRequestId();
-		$category = self::getCategory();
-
-		//Check to see if the user has visited the current route yet this session
-		$log = PageView::where('session_id', $session_id)->where('route', $route)->first();
-		if($log)
-		{
-			$log->views++;
-			$log->save();
-		}
-		else
-		{
-			$log = new PageView();
-			$log->application = (defined('APP_NAME')) ? APP_NAME : 'Unspecified';
-			$log->session_id = $session_id;
-			$log->user_id = (\Auth::check()) ? \Auth::user()->id : null;
-			$log->route = $route;
-			$log->request_id = $request_id;
-			$log->views = 1;
-			$log->category = $category;
-			$log->method = \Request::method();
-			$log->save();
-		}
+		$pv = new PageView();
+		$pv->session_id = \Session::getId();
+		$pv->page_id = $page_id;
+		$pv->save();
 	}
 
-	public static function getRequestId()
+	public function page()
 	{
-		return \Request::segment(3);
+		$this->hasOne('\DealerLive\Cms\Models\Page');
 	}
 
-	public static function getCategory()
+	public static function getPageViews(\DateTime $start = null, \DateTime $end = null)
 	{
-		return \Request::segment(1);
+		if(is_null($start))
+			$start = new \DateTime();
+		
+		if(is_null($end))
+			$end = new \DateTime();
+
+		$start = $start->format('Y-m-d');
+		$end = $end->add(new \DateInterval('P01D'))->format('Y-m-d');
+
+		$views = \DB::table('action_page AS a')->
+						select(\DB::raw('p.name as page_name, p.url as page_url, count(*) as views'))->
+						join('cms_pages AS p', 'page_id', '=', 'p.id')->
+						whereBetween('a.created_at', array($start, $end))->
+						groupBy('page_id')->orderBy('views', 'DESC')->get();
+		return $views;
+	}
+
+	public static function reportPageViews($daily = false, $start = null, $end = null)
+	{
+		if($daily)
+		{
+			$start = null;
+			$end = null;
+		}
+
+		if(!$daily && is_null($start))
+			$start = new \DateTime('1900-01-01');
+		if(!$daily && is_null($end))
+			$end = with(new \DateTime())->add(new \DateInterval('P01D'));
+
+		$data = self::getPageViews($start, $end);
+		return $data;
 	}
 }

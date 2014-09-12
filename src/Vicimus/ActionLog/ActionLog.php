@@ -2,6 +2,10 @@
 
 namespace Vicimus\ActionLog;
 
+use \DealerLive\Reporting\Models\Report;
+use \Vicimus\ActionLog\Models\PageView;
+use \DealerLive\Inventory\Models\Vehicle;
+
 class ActionLog extends \Eloquent
 {
 	
@@ -370,6 +374,87 @@ class ActionLog extends \Eloquent
 	{
 		return \Vicimus\ActionLog\Models\Subscription::notification($this);
 	}
+
+	public static function reportVehicleViews($start = null, $end = null)
+	{
+		\Report::convertDate($start, $end);
+		$pageData = \DB::table('action_page')->
+						select(\DB::raw('request_id, SUM(views) as total_views'))->
+						whereNotNull('request_id')->
+						where('category', 'inventory')->groupBy('request_id')->
+						whereBetween('created_at', array($start, $end))->
+						orderBy('total_views', 'DESC')->get();
+		$vehicleIds = array();
+		
+		foreach($pageData as $pd)
+		{
+			if(is_numeric($pd->request_id))
+				$vehicleIds[] = $pd->request_id;
+		}
+
+		$vehicles = Vehicle::whereIn('id', $vehicleIds)->get();
+		$results = array();
+		foreach($vehicles as $v)
+		{
+			$data = new \stdClass();
+			$data->vehicle_stock = $v->stock_number;
+			$data->vehicle_make = $v->make;
+			$data->vehicle_model = $v->model;
+			$data->vehicle_year = $v->year;
+			$data->view_count = $v->getPageViews();
+			$results[] = $data;
+		}
+		
+		return $results;
+	}
+
+	public static function reportVehicleViewsByModel($start = null, $end = null)
+	{
+		\Report::convertDate($start, $end);
+		$pageData = \DB::table('action_page')->
+						select(\DB::raw('request_id, SUM(views) as total_views'))->
+						where('category', 'inventory')->groupBy('request_id')->
+						whereBetween('created_at', array($start, $end))->
+						orderBy('total_views', 'DESC')->get();
+		$vehicleIds = array();
+		$count = 0;
+		foreach($pageData as $pd)
+		{
+			$count++;
+			if(is_numeric($pd->request_id))
+				$vehicleIds[] = $pd->request_id;
+		}
+
+		$vehicles = Vehicle::whereIn('id', $vehicleIds)->get();
+		$models = array();
+		foreach($vehicles as $v)
+		{
+			if(array_key_exists($v->model, $models))
+			{
+				$models[$v->model]->view_count += $v->getPageViews();
+			}
+			else
+			{
+				$data = new \stdClass();
+				$data->vehicle_make = $v->make;
+				$data->vehicle_model = $v->model;
+				$data->view_count = $v->getPageViews();
+				$models[$v->model] = $data;
+			}
+		}
+
+		//Need to format it for the reporting package
+		$results = array();
+		foreach($models as $m)
+		{
+			$results[] = $m;
+		}
+
+		return $results;
+
+	}
+
+
 
 }
 

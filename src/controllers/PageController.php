@@ -70,7 +70,7 @@ class PageController extends \BaseController
 
 	public function raw()
 	{
-		$pageData = \Vicimus\ActionLog\Models\PageView::orderBy('updated_at', 'DESC')->get();
+		$pageData = \Vicimus\ActionLog\Models\PageView::orderBy('route')->get();
 
 		//Could insert conditionals here, but since it's a raw view, may want to just
 		//display everything no matter what their settings are.
