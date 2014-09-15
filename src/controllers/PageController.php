@@ -6,37 +6,14 @@ class PageController extends \BaseController
 {
 	public function index()
 	{
-		$pageData = \DB::table('action_page')->
-						select(\DB::raw('route, SUM(views) as total_views'))->
-						groupBy('route')->
-						orderBy('total_views', 'DESC');
+		$report = new \DealerLive\Reporting\Models\ReportReference(null, null, null, null, null);
 
-		if(\DealerLive\Config\Helper::check('action_page_404') != 'true')
-			$pageData = $pageData->where('route', '!=', '404');
+		$report->data = \Vicimus\ActionLog\Models\PageView::getPageViews();
+		$report->heading = "Page Views";
+		$report->size = 12;
 
-		if(\DealerLive\Config\Helper::check('action_page_post') != 'true')
-			$pageData = $pageData->where('method', '!=', 'POST');
-
-		if(\DealerLive\Config\Helper::check('action_page_assets') != 'true')
-			$pageData = $pageData->where('route', 'NOT LIKE', 'assets%');
-
-		if(\DealerLive\Config\Helper::check('action_page_admin') == 'true')
-		{
-			$users = \Role::find(\DB::table('roles')->select('id')->where('name', 'Super Admin')->first()->id)->users()->get();
-			$ids = array();
-			foreach($users as $u)
-			{
-				$ids[] = $u->id;
-			}
-
-			$pageData = $pageData->whereNotIn('user_id', $ids);
-		}
-			
-
-
-		$pageData = $pageData->get();
-
-		return \View::make('actionlog::pages.index', compact('pageData'));
+		$data = \View::make('Reporting::reports.table', compact('report'));
+		return \View::make('actionlog::pages.index', compact('data'));
 	}
 
 	public function category($category)
