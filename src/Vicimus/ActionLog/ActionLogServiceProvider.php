@@ -60,9 +60,7 @@ class ActionLogServiceProvider extends ServiceProvider {
 		\Event::listen('config.nav', function(){
 			\DealerLive\Config\Helper::assemble_nav('Page Views::'.\URL::to('dashboard/config/pageviews'), 'dev');
 		}, 1);
-		\Event::listen('config.build.pageviews', function(){
-			return 'actionlog::pageviews';
-		}, 1);
+
 
 		\Event::listen('reporting.types', function(){
 			return new ReportReference(
