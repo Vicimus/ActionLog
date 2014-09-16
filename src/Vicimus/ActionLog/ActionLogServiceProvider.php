@@ -61,58 +61,75 @@ class ActionLogServiceProvider extends ServiceProvider {
 			\DealerLive\Config\Helper::assemble_nav('Page Views::'.\URL::to('dashboard/config/pageviews'), 'dev');
 		}, 1);
 
+		if(class_exists('\DealerLive\Cms\Models\Page'))
+		{
+			\Event::listen('reporting.types', function(){
+				return new ReportReference(
+					'\Vicimus\ActionLog\Models\PageView',
+					array(true),
+					"table",
+					"reportPageViews",
+					"Daily Page Views Report",
+					array('nodates'));
+			});
 
-		\Event::listen('reporting.types', function(){
-			return new ReportReference(
-				'\Vicimus\ActionLog\Models\PageView',
-				null,
-				"table",
-				"reportPageViews",
-				"Daily Page Views Report",
-				array('nodates'));
-		});
+			\Event::listen('reporting.types', function(){
+				return new ReportReference(
+					'\Vicimus\ActionLog\Models\PageView',
+					array(false),
+					'table',
+					'reportPageViews',
+					'Page Views Report'
+					);
+			});
+		}
 
-		\Event::listen('reporting.types', function(){
-			return new ReportReference(
-				'\Vicimus\ActionLog\Models\VehicleView',
-				array(false),
-				'table',
-				'reportVehicleViews',
-				'Vehicle View Report'
-				);
-		});
+		if(class_exists('\DealerLive\Inventory\Models\Vehicle'))
+		{
+			\Event::listen('reporting.types', function(){
+				return new ReportReference(
+					'\Vicimus\ActionLog\Models\VehicleView',
+					array(false),
+					'table',
+					'reportVehicleViews',
+					'Vehicle View Report'
+					);
+			});
 
-		\Event::listen('reporting.types', function(){
-			return new ReportReference(
-				'\Vicimus\ActionLog\Models\VehicleView',
-				array(true),
-				'table',
-				'reportVehicleViews',
-				'Daily Vehicle View Report',
-				array('nodates')
-				);
-		});
+			\Event::listen('reporting.types', function(){
+				return new ReportReference(
+					'\Vicimus\ActionLog\Models\VehicleView',
+					array(true),
+					'table',
+					'reportVehicleViews',
+					'Daily Vehicle View Report',
+					array('nodates')
+					);
+			});
 
-		\Event::listen('reporting.types', function(){
-			return new ReportReference(
-				'\Vicimus\ActionLog\Models\VehicleView',
-				array(true),
-				'table',
-				'reportModelViews',
-				'Daily Model View Report',
-				array('nodates')
-				);
-		});
+			\Event::listen('reporting.types', function(){
+				return new ReportReference(
+					'\Vicimus\ActionLog\Models\VehicleView',
+					array(true),
+					'table',
+					'reportModelViews',
+					'Daily Model View Report',
+					array('nodates')
+					);
+			});
 
-		\Event::listen('reporting.types', function(){
-			return new ReportReference(
-				'\Vicimus\ActionLog\Models\VehicleView',
-				array(false),
-				'table',
-				'reportModelViews',
-				'Model View Report'
-				);
-		});
+			\Event::listen('reporting.types', function(){
+				return new ReportReference(
+					'\Vicimus\ActionLog\Models\VehicleView',
+					array(false),
+					'table',
+					'reportModelViews',
+					'Model View Report'
+					);
+			});
+		}
+		
+		
 
 	}
 
