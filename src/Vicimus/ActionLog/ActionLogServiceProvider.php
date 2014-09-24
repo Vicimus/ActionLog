@@ -44,7 +44,7 @@ class ActionLogServiceProvider extends ServiceProvider {
 		});
 
 		//'View Log Report::'.\URL::to(ActionLog::$route) => 'made_up_thing',
-
+		/*
 		\Event::listen('ui.navigation.after', function() {
 			\Navigation::assemble(
 				array(
@@ -55,7 +55,7 @@ class ActionLogServiceProvider extends ServiceProvider {
 						),
 				)
 			);
-		}, 40);
+		}, 40);*/
 
 		if(class_exists('\DealerLive\Cms\Models\Page'))
 		{
