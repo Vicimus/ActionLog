@@ -8,7 +8,7 @@ class PageController extends \BaseController
 	{
 		$report = new \DealerLive\Reporting\Models\ReportReference(null, null, null, null, null);
 
-		$report->data = \Vicimus\ActionLog\Models\PageView::getPageViews();
+		$report->data = \Vicimus\ActionLog\Models\PageView::getPageViews(new \DateTime('January 1, 1901'));
 		$report->heading = "Page Views";
 		$report->size = 12;
 
