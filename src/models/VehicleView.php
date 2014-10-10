@@ -20,7 +20,12 @@ class VehicleView extends \Eloquent
 		return $this->belongsTo('\DealerLive\Inventory\Models\Vehicle');
 	}
 
-	public static function getVehicleViews(\DateTime $start = null, \DateTime $end = null)
+	public static function getViewsByID($id)
+	{
+		return VehicleView::where('vehicle_id', $id)->count();
+	}
+
+	public static function getVehicleViews(\DateTime $start = null, \DateTime $end = null, $type = null)
 	{
 		if(is_null($start))
 			$start = new \DateTime();
@@ -34,8 +39,13 @@ class VehicleView extends \Eloquent
 		$views = \DB::table('action_page_vehicle AS a')->
 						select(\DB::raw('v.stock_number as stock, v.year as year, v.make as make, v.model as model, count(*) as views'))->
 						join('vehicles AS v', 'vehicle_id', '=', 'v.id')->
-						whereBetween('a.created_at', array($start, $end))->
-						groupBy('a.vehicle_id')->orderBy('views', 'DESC')->get();
+						whereBetween('a.created_at', array($start, $end));
+		if(!is_null($type))
+		{
+			$views = $views->where('v.type', $type);
+		}
+
+		$views = $views->groupBy('a.vehicle_id')->orderBy('views', 'DESC')->get();
 		return $views;
 	}
 
