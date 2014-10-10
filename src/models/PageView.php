@@ -13,6 +13,10 @@ class PageView extends \Eloquent
 		$pv = new PageView();
 		$pv->session_id = \Session::getId();
 		$pv->page_id = $page_id;
+
+		if(class_exists('\DealerLive\Cms\CmsmlServiceProvider'))
+			$pv->locale = \App::getLocale();
+
 		$pv->save();
 	}
 
@@ -32,11 +36,21 @@ class PageView extends \Eloquent
 		$start = $start->format('Y-m-d');
 		$end = $end->add(new \DateInterval('P01D'))->format('Y-m-d');
 
+		if(class_exists('\DealerLive\Cms\CmsmlServiceProvider'))
+			$locale = \App::getLocale().'_';
+		else
+			$locale = null;
+
 		$views = \DB::table('action_page AS a')->
 						select(\DB::raw('p.name as page_name, p.url as page_url, count(*) as views'))->
-						join('cms_pages AS p', 'page_id', '=', 'p.id')->
-						whereBetween('a.created_at', array($start, $end))->
-						groupBy('page_id')->orderBy('views', 'DESC')->get();
+						join($locale.'cms_pages AS p', 'page_id', '=', 'p.id')->
+						whereBetween('a.created_at', array($start, $end));
+
+		if(class_exists('\DealerLive\Cms\CmsmlServiceProvider'))
+			$views = $views->where('a.locale', \App::getLocale());
+
+		$views = $views->groupBy('page_id')->orderBy('views', 'DESC')->get();
+
 		return $views;
 	}
 
