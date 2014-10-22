@@ -108,9 +108,13 @@ else
                   <td style="width: 40%"><strong>Property Name</strong></td>
                   <td style="width: 60%"><strong>Property Value</strong></td>
                 </tr>
-              @foreach($post as $property => $value)
-              <tr><td>{{$property}}</td><td>{{$value}}</td></tr>
-              @endforeach
+              @if(is_array($post))
+                @foreach($post as $property => $value)
+                <tr><td>{{$property}}</td><td>{{$value}}</td></tr>
+                @endforeach
+              @else
+                <tr><td>{{$post}}</td></tr>
+              @endif
             </table>
           <?php
             }
