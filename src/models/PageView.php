@@ -58,8 +58,8 @@ class PageView extends \Eloquent
 	{
 		if($daily)
 		{
-			$start = null;
-			$end = null;
+			$start = new \DateTime('Yesterday');
+			$end = new \DateTime('Yesterday');
 		}
 
 		if(!$daily && is_null($start))
