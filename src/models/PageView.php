@@ -68,6 +68,9 @@ class PageView extends \Eloquent
 			$end = with(new \DateTime())->add(new \DateInterval('P01D'));
 
 		$data = self::getPageViews($start, $end);
+		if($daily)
+			foreach($data as $d)
+				$d->page_name = '<a href="'.\URL::to($d->page_url).'" style="color: #333;">'.$d->page_name.'</a>';
 		return $data;
 	}
 }
