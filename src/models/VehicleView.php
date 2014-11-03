@@ -88,8 +88,11 @@ class VehicleView extends \Eloquent
 		if(!$daily && is_null($end))
 			$end = with(new \DateTime())->add(new \DateInterval('P01D'));
 		
-
 		$data = self::getVehicleViews($start, $end);
+		if($daily)
+			foreach($data as $d)
+				$d->stock = '<a href="'.\URL::route('inventory', 'all').'?q='.$d->stock.'" style="color: #333;">'.$d->stock.'</a>';
+
 		return $data;
 	}
 
@@ -105,7 +108,6 @@ class VehicleView extends \Eloquent
 			$start = new \DateTime('1900-01-01');
 		if(!$daily && is_null($end))
 			$end = with(new \DateTime())->add(new \DateInterval('P01D'));
-
 
 		$data = self::getModelViews($start, $end);
 		return $data;
