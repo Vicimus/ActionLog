@@ -27,6 +27,7 @@ class VehicleView extends \Eloquent
 
 	public static function getVehicleViews(\DateTime $start = null, \DateTime $end = null, $type = null)
 	{
+	
 		if(is_null($start))
 			$start = new \DateTime();
 		
@@ -68,8 +69,19 @@ class VehicleView extends \Eloquent
 		return $views;
 	}
 
-	public static function reportVehicleViews($daily = false, $start = null, $end = null)
+	public static function reportVehicleViews($params = null, $start = null, $end = null)
 	{
+		
+		if(is_object($params))
+		{
+			$daily = $params->daily;
+			$type = $params->type;
+		}
+		else
+		{
+			$daily = $params;
+			$type = null;
+		}
 
 		if(!is_null($start))
 			$start = new \DateTime($start);
@@ -88,7 +100,7 @@ class VehicleView extends \Eloquent
 		if(!$daily && is_null($end))
 			$end = with(new \DateTime())->add(new \DateInterval('P01D'));
 		
-		$data = self::getVehicleViews($start, $end);
+		$data = self::getVehicleViews($start, $end, $type);
 		if($daily)
 			foreach($data as $d)
 				$d->stock = '<a href="'.\URL::route('inventory', 'all').'?q='.$d->stock.'" style="color: #333;">'.$d->stock.'</a>';
