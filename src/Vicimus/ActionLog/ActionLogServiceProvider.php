@@ -169,6 +169,60 @@ class ActionLogServiceProvider extends ServiceProvider {
 	            return $report;
         	});
 
+        	\Event::listen('reporting.types', function(){
+        		$report = new ReportReference();
+
+        		$report->setClass('\Vicimus\ActionLog\Models\VehicleView');
+        		$report->setReport('reportVehicleViews');
+
+        		$report->setType('table');
+
+        		$report->setName('MTD Vehicle Views');
+        		$report->setRules(array('nodates'));
+
+        		$start = with(new \DateTime())->modify('first day of this month')->format('Y-m-d');
+        		$end = with(new \DateTime('Yesterday'))->format('Y-m-d');
+        		$report->setParams(array('daily' => true, 'start' => $start, 'end' => $end));
+
+        		return $report;
+        	});
+
+        	\Event::listen('reporting.types', function(){
+        		$report = new ReportReference();
+
+        		$report->setClass('\Vicimus\ActionLog\Models\VehicleView');
+        		$report->setReport('reportVehicleViews');
+
+        		$report->setType('table');
+
+        		$report->setName('MTD New Vehicle Views');
+        		$report->setRules(array('nodates'));
+
+        		$start = with(new \DateTime())->modify('first day of this month')->format('Y-m-d');
+        		$end = with(new \DateTime('Yesterday'))->format('Y-m-d');
+        		$report->setParams(array('daily' => true, 'start' => $start, 'end' => $end, 'type' => 'new'));
+
+        		return $report;
+        	});
+
+        	\Event::listen('reporting.types', function(){
+        		$report = new ReportReference();
+
+        		$report->setClass('\Vicimus\ActionLog\Models\VehicleView');
+        		$report->setReport('reportVehicleViews');
+
+        		$report->setType('table');
+
+        		$report->setName('MTD Used Vehicle Views');
+        		$report->setRules(array('nodates'));
+
+        		$start = with(new \DateTime())->modify('first day of this month')->format('Y-m-d');
+        		$end = with(new \DateTime('Yesterday'))->format('Y-m-d');
+        		$report->setParams(array('daily' => true, 'start' => $start, 'end' => $end, 'type' => 'used'));
+
+        		return $report;
+        	});
+
 		}
 		
 		
