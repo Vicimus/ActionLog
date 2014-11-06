@@ -72,10 +72,30 @@ class VehicleView extends \Eloquent
 	public static function reportVehicleViews($params = null, $start = null, $end = null)
 	{
 		
+		$parameterStart = false;
+		$parameterEnd = false;
+
 		if(is_object($params))
 		{
 			$daily = $params->daily;
-			$type = $params->type;
+			if(property_exists($params, 'type'))
+				$type = $params->type;
+			else
+				$type = null;
+
+			if(property_exists($params, 'start'))
+			{
+				$start = $params->start;
+				$parameterStart = true;
+			}
+				
+
+			if(property_exists($params, 'end'))
+			{
+				$end = $params->end;
+				$parameterEnd = true;
+			}
+				
 		}
 		else
 		{
@@ -83,15 +103,21 @@ class VehicleView extends \Eloquent
 			$type = null;
 		}
 
-		if(!is_null($start))
+		if(!is_null($start)){
 			$start = new \DateTime($start);
+		}
+			
 
 		if(!is_null($end))
 			$end = new \DateTime($end);
-
-		if($daily)
+		
+		if($daily && $parameterStart == false)
 		{
 			$start = new \DateTime('Yesterday');
+		}
+
+		if($daily && $parameterEnd == false)
+		{
 			$end = new \DateTime('Yesterday');
 		}
 
@@ -101,6 +127,7 @@ class VehicleView extends \Eloquent
 			$end = with(new \DateTime())->add(new \DateInterval('P01D'));
 		
 		$data = self::getVehicleViews($start, $end, $type);
+
 		if($daily)
 			foreach($data as $d)
 				$d->stock = '<a href="'.\URL::route('inventory', 'all').'?q='.$d->stock.'" style="color: #333;">'.$d->stock.'</a>';
