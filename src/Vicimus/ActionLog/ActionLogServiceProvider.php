@@ -123,6 +123,52 @@ class ActionLogServiceProvider extends ServiceProvider {
 					'Model View Report'
 					);
 			});
+
+
+			/*
+			\Event::listen('reporting.types', function(){
+				return new ReportReference(
+					'\Vicimus\ActionLog\Models\VehicleView',
+					array(true),
+					'table',
+					'reportVehicleViews',
+					'Daily Vehicle View Report',
+					array('nodates')
+					);
+			});
+			*/
+			\Event::listen('reporting.types', function(){
+
+	            $report = new ReportReference();
+
+	            $report->setClass('\Vicimus\ActionLog\Models\VehicleView');
+	            $report->setReport('reportVehicleViews');
+
+	            $report->setType('table');
+
+	            $report->setName('Daily New Vehicle View Report');
+	            $report->setRules(array('nodates'));
+	            $report->setParams(array('daily' => true, 'type' => 'new'));
+
+	            return $report;
+        	});
+
+        	\Event::listen('reporting.types', function(){
+
+	            $report = new ReportReference();
+
+	            $report->setClass('\Vicimus\ActionLog\Models\VehicleView');
+	            $report->setReport('reportVehicleViews');
+
+	            $report->setType('table');
+
+	            $report->setName('Daily Used Vehicle View Report');
+	            $report->setRules(array('nodates'));
+	            $report->setParams(array('daily' => true, 'type' => 'used'));
+
+	            return $report;
+        	});
+
 		}
 		
 		
