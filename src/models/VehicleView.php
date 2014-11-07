@@ -2,6 +2,8 @@
 
 namespace Vicimus\ActionLog\Models;
 
+use \DealerLive\Inventory\Models\Vehicle;
+
 class VehicleView extends \Eloquent
 {
 	protected $table = 'action_page_vehicle';
@@ -47,6 +49,7 @@ class VehicleView extends \Eloquent
 		}
 
 		$views = $views->groupBy('a.vehicle_id')->orderBy('views', 'DESC')->get();
+
 		return $views;
 	}
 
@@ -128,10 +131,19 @@ class VehicleView extends \Eloquent
 		
 		$data = self::getVehicleViews($start, $end, $type);
 
-		if($daily)
-			foreach($data as $d)
-				$d->stock = '<a href="'.\URL::route('inventory', 'all').'?q='.$d->stock.'" style="color: #333;">'.$d->stock.'</a>';
+		//modify results for formatting reasons
+		foreach($data as $d)
+		{
+			$vehicle = Vehicle::getVehicleByStock($d->stock);
+			$d->_row = (Vehicle::getVehicleByStock($d->stock)->isSold()) ? 'color: #CCC' : null;
 
+			//Modifying properties needs to happen last
+			$linkColor = (is_null($d->_row)) ? '#333' : '#CCC';
+			$postfix = (!is_null($d->_row)) ? " (Sold)" : null;
+			$d->stock = '<a href="'.\URL::route('inventory', 'all').'?q='.$d->stock.'" style="color: '.$linkColor.';">'.$d->stock.$postfix.'</a>';
+
+		}
+				
 		return $data;
 	}
 
