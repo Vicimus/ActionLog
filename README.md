@@ -58,4 +58,4 @@ By default:
 * Session IDs are shortened to help readability.
 * Requests by the Super Admin are recorded but this can be disabled, as it can skew the data.
 
-You can view the page view data through the dashboard under `Action Log -> View Page Data`
+You can view the page view data through the dashboard under `Reporting -> View Page Data`
