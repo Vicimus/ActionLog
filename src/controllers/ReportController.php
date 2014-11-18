@@ -65,7 +65,7 @@ class ReportController extends \BaseController {
 			$data = $data->where('archive', false);
 		$data = $data->orderBy('archive')->
 				orderBy('created_at', 'DESC')->
-				paginate(10);
+				paginate(40);
 
 		$data->_name = $name;
 
