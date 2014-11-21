@@ -63,8 +63,7 @@ class ReportController extends \BaseController {
 
 		if(!$archived)
 			$data = $data->where('archive', false);
-		$data = $data->orderBy('archive')->
-				orderBy('created_at', 'DESC')->
+		$data = $data->orderBy('created_at', 'DESC')->
 				paginate(40);
 
 		$data->_name = $name;
