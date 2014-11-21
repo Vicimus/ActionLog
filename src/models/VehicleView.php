@@ -27,9 +27,30 @@ class VehicleView extends \Eloquent
 		return VehicleView::where('vehicle_id', $id)->count();
 	}
 
+	public static function getInventoryPageViews(\DateTime $start = null, \DateTime $end =  null, $type = null)
+	{
+		if(is_null($start))
+			$start = new \DateTime();
+		
+		if(is_null($end))
+			$end = new \DateTime();
+		$start = $start->format('Y-m-d');
+		$end = $end->add(new \DateInterval('P01D'))->format('Y-m-d');
+
+		$views = \DB::table('action_page_vehicle AS a')->
+					select(\DB::raw('count(*) as views'))->
+					join('vehicles AS v', 'vehicle_id', '=', 'v.id')->
+					whereBetween('a.created_at', array($start, $end));
+
+		if(!is_null($type))
+			$views = $views->where('type', $type);
+
+		return $views->count();
+	}
+
 	public static function getVehicleViews(\DateTime $start = null, \DateTime $end = null, $type = null)
 	{
-	
+
 		if(is_null($start))
 			$start = new \DateTime();
 		
@@ -161,6 +182,9 @@ class VehicleView extends \Eloquent
 			$end = with(new \DateTime())->add(new \DateInterval('P01D'));
 
 		$data = self::getModelViews($start, $end);
+
+		
+		
 		return $data;
 	}
 	
