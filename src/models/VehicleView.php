@@ -78,7 +78,6 @@ class VehicleView extends \Eloquent
 		$returnData = array();
 		foreach($views as $v)
 		{
-			dd($v);
 			if($v->views > 1)
 				$returnData[] = $v;
 		}
