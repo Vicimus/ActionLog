@@ -48,7 +48,7 @@ class VehicleView extends \Eloquent
 		return $views->count();
 	}
 
-	public static function getVehicleViews(\DateTime $start = null, \DateTime $end = null, $type = null)
+	public static function getVehicleViews(\DateTime $start = null, \DateTime $end = null, $type = null, $daily = false)
 	{
 
 		if(is_null($start))
@@ -69,9 +69,21 @@ class VehicleView extends \Eloquent
 			$views = $views->where('v.type', $type);
 		}
 
-		$views = $views->groupBy('a.vehicle_id')->orderBy('views', 'DESC')->get();
+		$views = $views->groupBy('a.vehicle_id')->orderBy('views', 'DESC');
 
-		return $views;
+		$views = $views->get();
+
+		//Prune the results if it's a daily report.
+		//We don't want to return views of 1
+		$returnData = array();
+		foreach($views as $v)
+		{
+			dd($v);
+			if($v->views > 1)
+				$returnData[] = $v;
+		}
+
+		return $returnData;
 	}
 
 	public static function getModelViews(\DateTime $start = null, \DateTime $end = null)
@@ -150,7 +162,8 @@ class VehicleView extends \Eloquent
 		if(!$daily && is_null($end))
 			$end = with(new \DateTime())->add(new \DateInterval('P01D'));
 		
-		$data = self::getVehicleViews($start, $end, $type);
+	
+		$data = self::getVehicleViews($start, $end, $type, $daily);
 
 		//modify results for formatting reasons
 		foreach($data as $d)
