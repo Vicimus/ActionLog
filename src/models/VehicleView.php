@@ -109,6 +109,10 @@ class VehicleView extends \Eloquent
 		
 		$parameterStart = false;
 		$parameterEnd = false;
+		if($start && $end)
+			$limit = 50;
+		else
+			$limit = null;
 
 		if(is_object($params))
 		{
@@ -165,6 +169,7 @@ class VehicleView extends \Eloquent
 		$data = self::getVehicleViews($start, $end, $type, $daily);
 
 		//modify results for formatting reasons
+
 		foreach($data as $d)
 		{
 			$vehicle = Vehicle::getVehicleByStock($d->stock);
@@ -176,7 +181,10 @@ class VehicleView extends \Eloquent
 			$d->stock = '<a href="'.\URL::route('inventory', 'all').'?q='.$d->stock.'" style="color: '.$linkColor.';">'.$d->stock.$postfix.'</a>';
 
 		}
-				
+		
+		if(!is_null($limit) && count($data) > $limit)
+			return array_slice($data, 0, $limit);
+
 		return $data;
 	}
 
