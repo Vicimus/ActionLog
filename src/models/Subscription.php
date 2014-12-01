@@ -75,7 +75,7 @@ class Subscription extends \Eloquent
 	public function notify(\Vicimus\ActionLog\ActionLog $action)
 	{
 		\Mail::send('actionlog::notify.email', array('action' => $action), function($message){
-			$message->to($this->email)->subject('Error Notification');
+			$message->to($this->email)->subject(\DealerLive\Config\Helper::check('store_name').' Error Notification');
 		});
 	}
 }
