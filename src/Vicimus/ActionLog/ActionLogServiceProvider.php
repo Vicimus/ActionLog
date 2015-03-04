@@ -19,6 +19,9 @@ class ActionLogServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
+		if(class_exists('\DealerLive\Core\Classes\Package'))
+			\Event::fire('core.packages', array(new \DealerLive\Core\Classes\Package('Action Log', __DIR__)));
+
 		$this->package('vicimus/actionlog');
 
 		if(defined('\ACTIONLOG_ROUTE_PREFIX'))
@@ -38,6 +41,8 @@ class ActionLogServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		include __DIR__.'/../../navigation.php';
+		
 		$this->app['actionlog'] = $this->app->share(function($app)
 		{
 			return new ActionLog;
