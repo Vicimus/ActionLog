@@ -20,7 +20,7 @@ class ActionLogServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		if(class_exists('\DealerLive\Core\Classes\Package'))
-			\Event::fire('core.packages', array(new \DealerLive\Core\Classes\Package('Action Log', __DIR__)));
+			\Event::fire('core.packages', array(new \DealerLive\Core\Classes\Package('Action Log', 'Vicimus/ActionLog')));
 
 		$this->package('vicimus/actionlog');
 
